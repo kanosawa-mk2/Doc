@@ -1,0 +1,70 @@
+①基本的な設定を記述
+<!DOTYPE html>
+
+②Webページの設定とコンテンツの記述を用意
+<html>
+<head>
+<body>
+
+③コンテンツの言語の種類を設定
+<html lang="ja">
+
+④エンコードの種類を設定
+<meta charset="UTF-8">
+
+⑤ページのタイトルの設定
+<title>
+
+⑥スタイルシートファイルを指定
+<link rel="stylesheet" href="style.css">
+
+================================
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="" type="text/css">
+<title>タイトル</title>
+</head>
+<body>
+</body>
+</html>
+================================
+
+
+Webページが読み込まれる際、JavaScriptによって動的にWebページを作成する場合
+→HTMLのbody部に埋め込む
+
+その他の場合
+→</body>タグの直前部に埋め込む。
+　正し、<body>配下で呼び出す必要がある関数(一連の処理をまとめたプログラム)などは　<head>タグ配下に埋め込む
+
+
+-- テンプレート --
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="UTF-8">
+     <title>サンプル</title>
+     <script>
+          // 関数を記述する
+          function test(){
+               return 'Hey!!';
+          }
+     </script>
+</head>
+<body>
+     <script>
+          // Webページを 動的にJavascriptで作成する場合
+          document.write('<hr>');
+          document.write('Hello world!!');
+          document.write('<hr>');
+          document.write(test());
+     </script>
+     <h>test</h>
+     <script>
+          //ここに通常のJavaScriptを記述する
+         
+     </script>
+</body>
+</html>

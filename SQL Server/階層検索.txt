@@ -1,0 +1,45 @@
+テーブル情報
+
+CREATE TABLE [SPUser].[ORG_TBL](
+     [ORG_CD] [varchar](8) NOT NULL,
+     [PARENT_ORG_CD] [varchar](8) NULL,
+     [ORG_NAME] [varchar](50) NOT NULL,
+     [ORG_LV] [numeric](1, 0) NOT NULL
+) ON [PRIMARY]
+
+
+---------------------------------------------------------
+階層検索クエリ
+---------------------------------------------------------
+DECLARE @org varchar(8);
+set @org = 'ORG01000';
+
+WITH CTE ([ORG_CD], [PARENT_ORG_CD],[ORG_CD2] ,[ORG_NAME], [ORG_LV],[lv] )
+AS
+(
+    SELECT
+                                 [ORG_CD]
+                                 ,[PARENT_ORG_CD]
+                                 ,CONVERT( varchar(15 ),SPACE( [ORG_LV]) + [ORG_CD] ) AS [ORG_CD2]
+                                 ,[ORG_NAME]
+                                 ,[ORG_LV]
+                                 ,1
+    FROM [SPDB] .[SPUser]. [ORG_TBL]
+    WHERE [ORG_CD] = @org
+ 
+    UNION ALL
+         
+    SELECT    
+                                 [T1].[ORG_CD]
+                                 ,[T1]. [PARENT_ORG_CD]
+                                 ,CONVERT( varchar(15 ),SPACE( [T1].[ORG_LV] ) + [T1]. [ORG_CD]) AS [ORG_CD2]
+                                 ,[T1]. [ORG_NAME]
+                                 ,[T1]. [ORG_LV]
+                                 ,CTE. [lv] + 1
+                 FROM [SPDB] .[SPUser]. [ORG_TBL] [T1]
+                 INNER JOIN CTE
+                 ON [T1] .[ORG_CD] = CTE .[PARENT_ORG_CD]
+)
+SELECT *
+FROM CTE
+Order by ORG_LV

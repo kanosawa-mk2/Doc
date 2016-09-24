@@ -1,0 +1,12 @@
+Module ExModule
+
+    <Extension()>
+    Public Function RudeValue(Of TResult)( ByVal aObj As Object, ByRef f As Func(Of Object, TResult)) As TResult
+        Try
+            Return f.Invoke(aObj)
+        Catch ex As NullReferenceException
+            Return Nothing
+        End Try
+    End Function
+
+End Module

@@ -1,0 +1,34 @@
+SQL Server接続
+
+string conStr = ConfigurationManager .ConnectionStrings["SPDBConnectionString"].ConnectionString;
+
+using (SqlConnection sqlCon = new SqlConnection(conStr))
+{
+      sqlCon.Open();
+
+      string sql = "SELECT count(1) FROM USER_TBL WHERE USER_ID = @1 and PASSWORD = @2";
+      using (SqlCommand com = new SqlCommand(sql, sqlCon))
+     {
+            SqlParameter param1 = com.CreateParameter();
+            param1.ParameterName = "@1";
+            param1.SqlDbType = SqlDbType.VarChar;
+            param1.Value = TextBox1.Text;
+
+            SqlParameter param2 = com.CreateParameter();
+            param2.ParameterName = "@2";
+            param2.SqlDbType = SqlDbType.VarChar;
+            param2.Value = TextBox2.Text;
+            com.Parameters.Add(param1);
+            com.Parameters.Add(param2);
+            
+            using (SqlDataReader reader = com.ExecuteReader())
+            {
+                                                                                
+      if (reader.HasRows)
+     {            reader.Read();
+            int result = reader.GetInt32(0);
+                         args.IsValid = (result > 0);
+               }
+          }      
+     }
+}

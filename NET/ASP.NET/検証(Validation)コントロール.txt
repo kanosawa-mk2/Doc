@@ -1,0 +1,70 @@
+検証(Validation)コントロールについて
+
+　①Validationコントロールを追加
+　②IsValidプロパティ(Pageクラスのプロパティ)で検証の成否を判定するロジックを追加
+
+ASP.NETのValidationコントロール
+　RequiredFiledValidator　　…必須チェック
+　RangeValidator        　　…データ範囲チェック
+　CompareValidator　   　　 …比較チェック
+  RegularExpressionValidator…正規表現チェック
+　CustomValidator　　　　　 …カスタムの検証チェック
+　ValidationSummary　　　　 …検証コントロールの結果をサマリー表示
+
+サンプル
+    <div >
+        名前： <br />
+        <asp: TextBox ID ="txtName" runat ="server"></asp: TextBox>
+        <asp: RequiredFieldValidator ID ="reqName" runat ="server"
+            ControlToValidate="txtName" ErrorMessage="名前は必須です。" SetFocusOnError ="True"
+            CssClass="valid"></asp :RequiredFieldValidator>
+        <br />
+        体重： <br />
+        <asp: TextBox ID ="txtWeight" runat ="server" Columns ="5"></asp: TextBox>
+        Kg <asp: RangeValidator ID ="rngWeight" runat ="server"
+            ControlToValidate="txtWeight" ErrorMessage="体重は0～300Kgの範囲で入力してください。"
+            MaximumValue="300" MinimumValue="0" SetFocusOnError="True" Type="Integer"
+            CssClass="valid"></asp :RangeValidator>
+        <br />
+        誕生日： <br />
+        <asp: TextBox ID ="txtBirth" runat ="server" Columns ="10"></asp: TextBox>
+        <asp: CompareValidator ID ="cmpBirth" runat ="server" ControlToValidate ="txtBirth"
+            ErrorMessage="誕生日は日付形式で入力してください。" Operator="DataTypeCheck"
+            SetFocusOnError="True" Type="Date" CssClass="valid"></asp :CompareValidator>
+        <br />
+        E-Mail： <br />
+        <asp: TextBox ID ="txtEmail" runat ="server" Columns ="50"></asp: TextBox>
+        <asp: RegularExpressionValidator ID ="regEmail" runat ="server"
+            ControlToValidate="txtEmail" ErrorMessage="E-Mailアドレスは正しい形式で入力してください。"
+            SetFocusOnError="True"
+            ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
+            CssClass="valid"></asp :RegularExpressionValidator>
+        <br />
+        E-Mail（確認）： <br />
+        <asp: TextBox ID ="txtEmail2" runat ="server" Columns ="50"></asp: TextBox>
+        <asp: CompareValidator ID ="cmpEmail2" runat ="server" ControlToCompare ="txtEmail"
+            ControlToValidate="txtEmail2" ErrorMessage="E-MailとE-Mail（確認）は等しい必要があります。"
+            SetFocusOnError="True" CssClass="valid"></asp :CompareValidator>
+        <br />
+        <asp: Button ID ="btnSubmit" runat ="server" OnClick ="btnSubmit_Click" Text ="決定" />
+        <br />
+        <asp: Label ID ="lblResult" runat ="server"></asp: Label>
+    </div >
+
+
+
+カスタムバリデーションクラス
+
+aspx側
+<asp: CustomValidator runat ="server" CssClass ="valid" ErrorMessage ="ログイン失敗" OnServerValidate="Unnamed1_ServerValidate"></asp: CustomValidator>
+
+cs側
+ /// <summary>
+/// 検証クラス
+/// </summary>
+/// <param name="source"> 検証コントロール </param>
+/// <param name="args"> 引数</param>
+protected void Unnamed1_ServerValidate(object source, ServerValidateEventArgs args)
+{
+      args.IsValid = (result > 0);
+ }
