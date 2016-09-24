@@ -1,15 +1,15 @@
---Tableî•ñæ“¾
+--Tableæƒ…å ±å–å¾—
 
 SELECT
-    c.name as DMITEMCODE       --ƒJƒ‰ƒ€–¼(•¨—)
-                 ,epf. value as DMITEMNAME   --ƒJƒ‰ƒ€–¼(˜_—)
+    c.name as DMITEMCODE       --ã‚«ãƒ©ãƒ å(ç‰©ç†)
+                 ,epf. value as DMITEMNAME   --ã‚«ãƒ©ãƒ å(è«–ç†)
                  ,'ISNULLABLE' = case when c.is_nullable = 0 then 'false' -- null
                                      else 'true'
                                                                                  end
-                 ,'KEYGROUP'   = case when ic.column_id is not null then '1'  -- åƒL[
+                 ,'KEYGROUP'   = case when ic.column_id is not null then '1'  -- ä¸»ã‚­ãƒ¼
                                      else '0'
                                                                     end
-                 ,'LENGTH'     = case when tp.name = 'decimal' then c. precision  -- ”’lŒ^‚ÌŒ…”
+                 ,'LENGTH'     = case when tp.name = 'decimal' then c. precision  -- æ•°å€¤å‹ã®æ¡æ•°
                                      else '0'
                                                                     end
                  ,'BYTE'       = case when c.precision = 0 then c .max_length
@@ -17,7 +17,7 @@ SELECT
                                                                                                  when tp .name = 'decimal'   then 0
                                                                                                  else c .precision
                                                                     end
-    ,'SCALE'      = case when tp.name = 'datetime' then 0 -- ­”‚ÌŒ…”
+    ,'SCALE'      = case when tp.name = 'datetime' then 0 -- å°‘æ•°ã®æ¡æ•°
                                      else c .scale
                     end
                  ,'DATATYPE'   = tp .name
@@ -52,7 +52,7 @@ LEFT OUTER JOIN sys.foreign_keys as f
 LEFT OUTER JOIN sys.foreign_key_columns as fc
     ON  f .object_id = fc .constraint_object_id
                  AND fc .parent_column_id = c .column_id
--- Šg’£ƒvƒƒpƒeƒB
+-- æ‹¡å¼µãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 LEFT OUTER JOIN sys.extended_properties ept
     ON  ept .name = 'MS_Description'
                  AND ept .major_id = tb .object_id

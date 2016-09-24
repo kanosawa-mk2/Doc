@@ -1,15 +1,15 @@
 SELECT
-        T.TABLE_NAME    AS "ƒe[ƒuƒ‹•¨—–¼",
-        TC.COMMENTS     AS "ƒe[ƒuƒ‹˜_—–¼",
-        C.COLUMN_ID     AS "ƒJƒ‰ƒ€ID",
+        T.TABLE_NAME    AS "ãƒ†ãƒ¼ãƒ–ãƒ«ç‰©ç†å",
+        TC.COMMENTS     AS "ãƒ†ãƒ¼ãƒ–ãƒ«è«–ç†å",
+        C.COLUMN_ID     AS "ã‚«ãƒ©ãƒ ID",
         CASE WHEN PK.COLUMN_POSITION IS NOT NULL THEN PK.COLUMN_POSITION ELSE NULL END AS "PK",
-        C.COLUMN_NAME   AS "ƒJƒ‰ƒ€•¨—–¼",
-        CC.COMMENTS     AS "ƒJƒ‰ƒ€˜_—–¼",
-        C.DATA_TYPE     AS "ƒf[ƒ^ƒ^ƒCƒv",
+        C.COLUMN_NAME   AS "ã‚«ãƒ©ãƒ ç‰©ç†å",
+        CC.COMMENTS     AS "ã‚«ãƒ©ãƒ è«–ç†å",
+        C.DATA_TYPE     AS "ãƒ‡ãƒ¼ã‚¿ã‚¿ã‚¤ãƒ—",
         CASE WHEN C.DATA_PRECISION IS NOT NULL THEN '(' || C.DATA_PRECISION || '.' || C.DATA_SCALE || ')'
-                ELSE TO_CHAR(C.DATA_LENGTH) END AS "ƒf[ƒ^’·",
-        C.NULLABLE      AS "NULL‰Â",
-        C.DATA_DEFAULT AS "ƒfƒtƒHƒ‹ƒg’l"FROM
+                ELSE TO_CHAR(C.DATA_LENGTH) END AS "ãƒ‡ãƒ¼ã‚¿é•·",
+        C.NULLABLE      AS "NULLå¯",
+        C.DATA_DEFAULT AS "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤"FROM
         USER_TABLES T
         INNER JOIN USER_TAB_COMMENTS TC ON (
                 T.TABLE_NAME = TC.TABLE_NAME
@@ -38,6 +38,6 @@ SELECT
                 C.COLUMN_NAME = PK.COLUMN_NAME
         )
 WHERE
-        T.TABLE_NAME LIKE '%ƒ‚±‚±‚Éƒe[ƒuƒ‹•¨—–¼‚ð“ü‚ê‚ÄŒŸõ„%'ORDER BY
+        T.TABLE_NAME LIKE '%ï¼œã“ã“ã«ãƒ†ãƒ¼ãƒ–ãƒ«ç‰©ç†åã‚’å…¥ã‚Œã¦æ¤œç´¢ï¼ž%'ORDER BY
         T.TABLE_NAME,
         C.COLUMN_ID

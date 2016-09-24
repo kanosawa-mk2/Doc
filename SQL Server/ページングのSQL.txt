@@ -1,9 +1,9 @@
-/****** ‘SŒŸõ  ******/
+/****** å…¨æ¤œç´¢  ******/
 SELECT *
 FROM [SPDB] .[SPUser]. [USER_TBL]
 ORDER BY USER_ID
 
-/****** ‹Œ@ROW_NUMBER‚É‚æ‚éƒy[ƒWƒ“ƒO  ******/
+/****** æ—§ã€€ROW_NUMBERã«ã‚ˆã‚‹ãƒšãƒ¼ã‚¸ãƒ³ã‚°  ******/
 SELECT *
 FROM (
                  SELECT * , ROW_NUMBER() OVER(ORDER BY USER_ID) as row
@@ -11,7 +11,7 @@ FROM (
                  ) a
 WHERE a .row > 2 and a. row <= 5
 
-/****** V@ROW_NUMBER‚É‚æ‚éƒy[ƒWƒ“ƒO  SQL Server 2012ˆÈ~ ******/
+/****** æ–°ã€€ROW_NUMBERã«ã‚ˆã‚‹ãƒšãƒ¼ã‚¸ãƒ³ã‚°  SQL Server 2012ä»¥é™ ******/
 SELECT *
 FROM [SPDB] .[SPUser]. [USER_TBL]
 ORDER BY USER_ID
