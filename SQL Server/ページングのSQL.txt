@@ -1,0 +1,19 @@
+/****** 全検索  ******/
+SELECT *
+FROM [SPDB] .[SPUser]. [USER_TBL]
+ORDER BY USER_ID
+
+/****** 旧　ROW_NUMBERによるページング  ******/
+SELECT *
+FROM (
+                 SELECT * , ROW_NUMBER() OVER(ORDER BY USER_ID) as row
+                 FROM [SPDB] .[SPUser]. [USER_TBL]
+                 ) a
+WHERE a .row > 2 and a. row <= 5
+
+/****** 新　ROW_NUMBERによるページング  SQL Server 2012以降 ******/
+SELECT *
+FROM [SPDB] .[SPUser]. [USER_TBL]
+ORDER BY USER_ID
+OFFSET 2 ROWS
+FETCH NEXT 3 ROWS ONLY
