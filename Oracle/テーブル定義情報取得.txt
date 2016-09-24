@@ -41,3 +41,5 @@ WHERE
         T.TABLE_NAME LIKE '%＜ここにテーブル物理名を入れて検索＞%'ORDER BY
         T.TABLE_NAME,
         C.COLUMN_ID
+        
+        test
