@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function doPost() {
+
+		var requestParam = JSON.stringify({
+			method : "calc.plus",
+			params : [parseInt($("#param1").val()),parseInt($("#param2").val())],
+			id : 1
+		});
+
+		$.ajax({
+			url : "http://localhost:8180/JsonicWebServiceProvider/rpc/rpc/rpc.json",
+			type : "POST",
+			dataType: 'json',
+			data : requestParam,
+			contentType : "application/json;charset=utf-8",
+			cache : false,
+			success: function(result) {
+				$("#result").text(JSON.stringify(result));
+			},
+			error: function(e) {
+				$("#result").text(JSON.stringify(e));
+			}
+		});
+
+	}
+</script>
+</head>
+<body>
+<h1>足し算サービス呼び出し</h1>
+<input id="param1" type="text" size="10" value=""/>
+<input id="param2" type="text" size="10" value=""/>
+<input type="button" value="send" onclick="doPost()" />
+
+<h2>result</h2>
+<pre id="result" style="font: 9pt monospace; border: 1px solid black; padding: 5px;"></pre>
+
+</body>
+</html>
