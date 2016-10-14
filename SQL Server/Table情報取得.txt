@@ -2,35 +2,35 @@
 
 SELECT
     c.name as DMITEMCODE       --カラム名(物理)
-                 ,epf. value as DMITEMNAME   --カラム名(論理)
-                 ,'ISNULLABLE' = case when c.is_nullable = 0 then 'false' -- null
-                                     else 'true'
-                                                                                 end
-                 ,'KEYGROUP'   = case when ic.column_id is not null then '1'  -- 主キー
-                                     else '0'
-                                                                    end
-                 ,'LENGTH'     = case when tp.name = 'decimal' then c. precision  -- 数値型の桁数
-                                     else '0'
-                                                                    end
-                 ,'BYTE'       = case when c.precision = 0 then c .max_length
-                                     when tp .name = 'datetime' then 0
-                                                                                                 when tp .name = 'decimal'   then 0
-                                                                                                 else c .precision
-                                                                    end
+	,epf. value as DMITEMNAME   --カラム名(論理)
+	,'ISNULLABLE' = case when c.is_nullable = 0 then 'false' -- null
+					 else 'true'
+					end
+	,'KEYGROUP'   = case when ic.column_id is not null then '1'  -- 主キー
+					 else '0'
+					end
+	,'LENGTH'     = case when tp.name = 'decimal' then c. precision  -- 数値型の桁数
+					 else '0'
+					end
+	,'BYTE'       = case when c.precision = 0 then c .max_length
+					 when tp .name = 'datetime' then 0
+					 when tp .name = 'decimal'   then 0
+				     else c .precision
+                 end
     ,'SCALE'      = case when tp.name = 'datetime' then 0 -- 少数の桁数
-                                     else c .scale
+                    else c .scale
                     end
-                 ,'DATATYPE'   = tp .name
+	,'DATATYPE'   = tp .name
 /**
-                --,'DATATYPE'   = case when tp.name = 'varchar' OR tp.name = 'nvarchar' OR tp.name = 'char' then 'TEXT'
-                --                     when tp.name = 'decimal' then 'NUM'
-                --                                                                              when tp.name = 'datetime' then 'TIME'
-                --                                                                              else 'UNKNOWN'
-    --                end
-                ,'REFDMCODE'  = case when COL_NAME(fc.referenced_object_id,fc.referenced_column_id) is not null then OBJECT_NAME(f.referenced_object_id)
-                         else ''
-                                                                    end
-                ,ISNULL(COL_NAME(fc.referenced_object_id,fc.referenced_column_id),'') as REFDMITEMCODE
+	,'DATATYPE'   = case when tp.name = 'varchar' OR tp.name = 'nvarchar' OR tp.name = 'char' then 'TEXT'
+	                     when tp.name = 'decimal' then 'NUM'
+	                     when tp.name = 'datetime' then 'TIME'
+						else 'UNKNOWN'
+                    end
+	,'REFDMCODE'  = case when COL_NAME(fc.referenced_object_id,fc.referenced_column_id) is not null then OBJECT_NAME(f.referenced_object_id)
+			else ''
+			end
+	,ISNULL(COL_NAME(fc.referenced_object_id,fc.referenced_column_id),'') as REFDMITEMCODE
 **/
 
 FROM sys .columns as c
@@ -41,7 +41,7 @@ INNER JOIN sys. types as tp
     AND c .user_type_id = tp .user_type_id
 LEFT OUTER JOIN sys.indexes as i
     ON  i .object_id = c .object_id
-                 AND i .is_primary_key = 1
+    AND i .is_primary_key = 1
 LEFT OUTER JOIN sys.index_columns as ic
     ON  i .object_id = ic .object_id
     AND i .index_id = ic .index_id
@@ -51,16 +51,15 @@ LEFT OUTER JOIN sys.foreign_keys as f
     ON  f .parent_object_id = tb .parent_object_id
 LEFT OUTER JOIN sys.foreign_key_columns as fc
     ON  f .object_id = fc .constraint_object_id
-                 AND fc .parent_column_id = c .column_id
+    AND fc .parent_column_id = c .column_id
 -- 拡張プロパティ
 LEFT OUTER JOIN sys.extended_properties ept
     ON  ept .name = 'MS_Description'
-                 AND ept .major_id = tb .object_id
-                 AND ept .minor_id = 0
+	AND ept .major_id = tb .object_id
+	AND ept .minor_id = 0
 LEFT OUTER JOIN sys.extended_properties epf
     ON  epf .name = 'MS_Description'
-                 AND epf .major_id = tb .object_id
-                 AND epf .minor_id = c .column_id
-
-WHERE tb .name = 'USER_TBL'
+	AND epf .major_id = tb .object_id
+	AND epf .minor_id = c .column_id
+WHERE tb .name = 'CONT_FPM_IF_CTRL'
 ORDER BY c. column_id
