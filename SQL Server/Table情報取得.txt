@@ -61,5 +61,5 @@ LEFT OUTER JOIN sys.extended_properties epf
     ON  epf .name = 'MS_Description'
 	AND epf .major_id = tb .object_id
 	AND epf .minor_id = c .column_id
-WHERE tb .name = 'CONT_FPM_IF_CTRL'
+WHERE tb .name = 'TABLE_NAME'
 ORDER BY c. column_id
