@@ -1,0 +1,8 @@
+        /// <summary>
+        /// ２重起動チェック
+        /// </summary>
+        /// <returns>true OK/false NG</returns>
+        private bool checkDoubleStarting()
+        {
+            return !(Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1);
+        }

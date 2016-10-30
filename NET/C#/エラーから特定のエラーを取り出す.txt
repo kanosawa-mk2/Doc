@@ -1,0 +1,21 @@
+        /// <summary>
+        /// Exception‚©‚ç“Á—á‚Ì—áŠO‚ðŽæ“¾‚µ‚Ü‚·
+        /// </summary>
+        /// <param name="ex">—áŠO</param>
+        /// <returns>“Á—á‚Ì—áŠO</returns>
+        private static T FetchException<T>(Exception ex) where T : Exception
+        {
+            var bex = typeof(T);
+            if (ex.GetType() == bex || ex.GetType().IsSubclassOf(bex))
+            {
+                return ex as T;
+            }
+            else if (ex.InnerException != null)
+            {
+                return FetchException<T>(ex.InnerException);
+            }
+            else
+            {
+                return null;
+            }
+        }

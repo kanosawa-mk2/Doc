@@ -1,0 +1,107 @@
+// リトライクラス処理
+        static void Main(string[] args)
+        {
+            new RetryExecutor().Execute(
+                () => {
+                    Console.WriteLine("処理1");
+                    throw new ArgumentException("error");
+                },
+                (ex,i) => {
+                    Console.WriteLine("ERROR発生:{0}:リトライ回数:{1}",ex.Message,i+1);
+                });
+            Console.WriteLine("END");
+            var a =  new RetryExecutor().Execute(
+                () =>
+                {
+                    Console.WriteLine("処理1");
+                    return "成功";
+                },
+                (ex, i) =>
+                {
+                    Console.WriteLine("ERROR発生:{0}:リトライ回数:{1}", ex.Message, i + 1);
+                });
+
+            Console.WriteLine(a);
+            Console.WriteLine("END");
+
+            Console.ReadKey();
+        }
+
+
+        /// <summary>
+        /// リトライ処理が必要な場合の、リトライのルールを定義する抽象クラスです。
+        /// このクラスを継承してリトライが必要な各処理でルールを定義します。
+        /// </summary>
+        public class RetryPolicyBase
+        {
+            /// <summary>
+            /// 最大リトライ回数
+            /// </summary>
+            public virtual int MaxRetryNum { get { return 3; } } 
+
+            /// <summary>
+            /// リトライ時のベースとなる処理停止時間
+            /// </summary>
+            public virtual int RetrySleep { get { return 1000; } } 
+        }
+
+        /// <summary>
+        /// リトライ処理が必要な箇所で指定された条件によってリトライを行うためのクラスです。
+        /// </summary>
+        public class RetryExecutor
+        {
+            private readonly RetryPolicyBase _policy = new RetryPolicyBase();
+
+            protected virtual void Sleep(){
+                Thread.Sleep(_policy.RetrySleep);
+            }
+
+            /// <summary>
+            /// リトライをかけながら指定された処理を実行します。
+            /// </summary>
+            /// <param name="executeAction">実行する処理</param>
+            /// <param name="errorAction">処理実行時に発生したエラー処理</param>
+            public virtual void Execute(Action executeAction, Action<Exception,int> errorAction = null)
+            {
+                for (var retryNum = 0; retryNum < _policy.MaxRetryNum; retryNum++)
+                {
+                    try
+                    {
+                        executeAction();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (errorAction != null) errorAction(ex, retryNum);
+
+                        if (retryNum >= _policy.MaxRetryNum)  throw;
+
+                        Sleep();
+                    }
+                }
+            }
+
+            /// <summary>
+            /// リトライをかけながら指定された処理を実行します。
+            /// </summary>
+            /// <param name="executeAction">実行する処理</param>
+            /// <param name="errorAction">処理実行時に発生したエラー処理</param>
+            public virtual T Execute<T>(Func<T> executeAction, Action<Exception,int> errorAction = null)
+            {
+                for (var retryNum = 0; retryNum < _policy.MaxRetryNum; retryNum++)
+                {
+                    try
+                    {
+                        return executeAction();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (errorAction != null) errorAction(ex, retryNum);
+
+                        if (retryNum >= _policy.MaxRetryNum)
+                            throw;
+
+                        Sleep();
+                    }
+                }
+                return default(T);
+            }

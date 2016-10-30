@@ -1,0 +1,41 @@
+/// コピー機能ユーティリティ
+    /// </summary>
+    public class CopyUtil
+    {
+        /// <summary>
+        /// クラス間で同名のプロパティをコピーする
+        /// </summary>
+        /// <typeparam name="T">コピー元クラスの型</typeparam>
+        /// <param name="from">コピー元クラス</param>
+        /// <param name="to">コピー先クラス</param>
+        /// <returns>コピー先クラス</returns>
+        public static T Copy<T>(object from, T to)
+        {
+            Func<string, string> delUnderber = (string p) => { return p.Replace("_", ""); };
+            foreach (var fromProperty in from.GetType().GetProperties())
+            {
+                var toProperty = (from property in to.GetType().GetProperties()
+                                  where delUnderber(property.Name.ToLower()) == delUnderber(fromProperty.Name.ToLower())
+                                  select property).FirstOrDefault();
+                if (toProperty == null) continue;
+                toProperty.SetValue(to, fromProperty.GetValue(from));
+            }
+            return to;
+        }
+
+        /// <summary>
+        /// リストに対して同名のプロパティをコピーする
+        /// </summary>
+        /// <typeparam name="T">コピー元クラスの型</typeparam>
+        /// <typeparam name="U">コピー先クラスの型</typeparam>
+        /// <param name="fromList">コピー元リスト</param>
+        /// <param name="toList">コピー先リスト</param>
+        /// <returns>コピー先リスト</returns>
+        public static List<T> CopyList<T, U>(List<U> fromList, List<T> toList) where T : new()
+        {
+
+            fromList.ForEach((from) => {toList.Add(Copy(from, new T()));});
+            return toList;
+        }
+
+    }

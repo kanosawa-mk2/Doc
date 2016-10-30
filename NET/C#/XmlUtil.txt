@@ -1,0 +1,311 @@
+/// <summary>
+    /// Xmlファイル作成・読み込み共通クラス
+    /// </summary>
+    public static class XmlUtil
+    {
+
+        /// <summary>ダミーElement</summary>
+        private static readonly XElement dummyXElement = new XElement("dummy");
+
+        /// <summary>ダミーAttribute</summary>
+        private static readonly XAttribute dummyXAttribute = new XAttribute("dummy", "");
+
+        /// <summary>改行コード正規表現</summary>
+        public static readonly Regex regLineFeed = new Regex("(\r\n|\n)");
+
+        /// <summary>
+        /// Xmlをデシリアライズします.
+        /// </summary>
+        /// <typeparam name="T">型</typeparam>
+        /// <param name="xml">XML</param>
+        /// <param name="defaultNamespace">デフォルト名前空間</param>
+        /// <returns>デシリアライズされたクラス</returns>
+        public static T DeSerializeXml<T>(string xml, string defaultNamespace = null)
+        {
+
+            XmlSerializer serializer;
+
+            if (defaultNamespace != null)
+            {
+                serializer = new XmlSerializer(typeof(T), defaultNamespace);
+            }
+            else
+            {
+                serializer = new XmlSerializer(typeof(T));
+            }
+
+            T result;
+            using (StringReader r = new StringReader(xml))
+            {
+                result = (T)serializer.Deserialize(r);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// シリアライズされたXmlを返します.
+        /// </summary>
+        /// <param name="target">シリアライズ対象</param>
+        /// <param name="defaultNamespace">デフォルト名前空間</param>
+        /// <param name="namespaces">名前空間</param>
+        /// <returns>Xml</returns>
+        public static string SerializeXml(Object target, string defaultNamespace, XmlSerializerNamespaces namespaces)
+        {
+            string xml;
+            XmlSerializer serializer;
+            if (defaultNamespace != null)
+            {
+                serializer = new XmlSerializer(target.GetType(), defaultNamespace);
+            }
+            else
+            {
+                serializer = new XmlSerializer(target.GetType());
+            }
+
+            using (var writer = new Utf8StringWriter())
+            {
+                if (namespaces != null)
+                {
+                    serializer.Serialize(writer, target, namespaces);
+                }
+                else
+                {
+                    serializer.Serialize(writer, target);
+                }
+                xml = writer.ToString();
+            }
+            return xml;
+
+
+        }
+
+        /// <summary>
+        /// シリアライズされたXmlを返します.
+        /// </summary>
+        /// <param name="target">シリアライズ対象</param>
+        /// <returns>Xml</returns>
+        public static string SerializeXml(Object target)
+        {
+            return SerializeXml(target, null, null);
+        }
+
+        /// <summary>
+        /// XElementから値を取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <returns>値</returns>
+        public static string GetValue(this XElement e)
+        {
+            string result = null;
+            //if (!e.IsEmpty)
+            if (!e.IsEmpty && !String.IsNullOrEmpty(e.Value))
+            {
+                result = ReplaceLineFeedCode(e.Value);
+            }
+
+            return result;
+        }
+
+
+
+        /// <summary>
+        /// XAttributeから値を取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <returns>値</returns>
+        public static string GetValue(this XAttribute e)
+        {
+            string result = null;
+            if (e.Name.LocalName != dummyXAttribute.Name.LocalName)
+            {
+                result = e.Value;
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// XElementからXElementを取得します.
+        /// XElementが存在しない場合は、ダミーのXElementを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="name">Element名</param>
+        /// <returns>XElement</returns>
+        public static XElement GetElement(this XElement e, string name)
+        {
+            return e.GetElement(e.Name.Namespace, name);
+        }
+
+        /// <summary>
+        /// XElementからXElementを取得します.
+        /// XElementが存在しない場合は、ダミーのXElementを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="xnamespace">名前空間</param>
+        /// <param name="name">Element名</param>
+        /// <returns>XElement</returns>
+        public static XElement GetElement(this XElement e, XNamespace xnamespace, string name)
+        {
+            XElement el = e.Element(xnamespace + name);
+            if (el == null)
+            {
+                el = dummyXElement;
+            }
+            return el;
+        }
+
+        /// <summary>
+        /// XElementからXElementsを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="name">Element名</param>
+        /// <returns>XElements</returns>
+        public static IEnumerable<XElement> GetElements(this XElement e, string name)
+        {
+            return e.GetElements(e.Name.Namespace, name);
+        }
+
+        /// <summary>
+        /// XElementからXElementsを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="xnamespace">名前空間</param>
+        /// <param name="name">Element名</param>
+        /// <returns>XElements</returns>
+        public static IEnumerable<XElement> GetElements(this XElement e, XNamespace xnamespace, string name)
+        {
+            IEnumerable<XElement> el = e.Elements(xnamespace + name);
+            return el;
+        }
+
+        /// <summary>
+        /// XElementからXElementsを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="names">Element名配列</param>
+        /// <returns>XElements</returns>
+        public static IEnumerable<XElement> GetElements(this XElement e, params string[] names)
+        {
+
+            return e.GetElements(e.Name.Namespace, names);
+        }
+
+        /// <summary>
+        /// XElementからXElementsを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="xnamespace">名前空間</param>
+        /// <param name="names">Element名配列</param>
+        /// <returns>XElements</returns>
+        public static IEnumerable<XElement> GetElements(this XElement e, XNamespace xnamespace, params string[] names)
+        {
+            List<XElement> elList = new List<XElement>();
+            GetElements(e, xnamespace, elList, names);
+            return elList;
+        }
+
+        /// <summary>
+        /// XElementからXElementsを取得します.
+        /// 
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="xnamespace">名前空間</param>
+        /// <param name="ret">Elementリスト</param>
+        /// <param name="names">Element名配列</param>
+        public static void GetElements(XElement e, XNamespace xnamespace, List<XElement> ret, params string[] names)
+        {
+            IEnumerable<XElement> elementsList = e.GetElements(xnamespace, names[0]);
+            if (names.Length == 1)
+            {
+                ret.AddRange(elementsList);
+            }
+            else
+            {
+                foreach (var el in elementsList)
+                {
+                    GetElements(el, xnamespace, ret, names.Skip(1).ToArray());
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// XElementからXAttributeを取得します.
+        /// XAttributeが存在しない場合は、ダミーのXAttributeを取得します.
+        /// </summary>
+        /// <param name="e">XElement</param>
+        /// <param name="name">Element名</param>
+        /// <returns>XAttribute</returns>
+        public static XAttribute GetAttribute(this XElement e, string name)
+        {
+            XAttribute attr = e.Attribute(name);
+            if (attr == null)
+            {
+                attr = dummyXAttribute;
+            }
+            return attr;
+        }
+
+        /// <summary>
+        /// XsdスキーマによるXml検証を行います.
+        /// 検証エラーが発生した場合はSystem.Xml.Schema.XmlSchemaExceptionをスローします。
+        /// </summary>
+        /// <param name="xml">xml</param>
+        /// <param name="xsdFilePath">xsdファイルパス</param>
+        public static void ValidationXsdSchema(string xml, string xsdFilePath)
+        {
+            var schemaSet = new XmlSchemaSet();
+            schemaSet.Add(null, xsdFilePath);
+            ValidationXsdSchema(xml, schemaSet);
+        }
+
+        /// <summary>
+        /// XsdスキーマによるXml検証を行います.
+        /// 検証エラーが発生した場合はSystem.Xml.Schema.XmlSchemaExceptionをスローします。
+        /// </summary>
+        /// <param name="xml">xml</param>
+        /// <param name="schemaSet">Xmlスキーマセット</param>
+        public static void ValidationXsdSchema(string xml, XmlSchemaSet schemaSet)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.PreserveWhitespace = true;
+            xmldoc.LoadXml(xml);
+
+            foreach (XmlSchema s in schemaSet.Schemas())
+            {
+                xmldoc.Schemas.Add(s);
+            }
+            xmldoc.Validate((sender, e) => { if (e.Severity == XmlSeverityType.Error) throw e.Exception; });
+        }
+
+        /// <summary>
+        /// 改行コードを変換します(LF → CRLF)
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <returns>改行コードを変換した値</returns>
+        public static string ReplaceLineFeedCode(string value)
+        {
+            string result = null;
+            if (value != null)
+            {
+                result = regLineFeed.Replace(value, "\r\n");
+            }
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// UTF8 BOM無　Writerクラス
+    /// </summary>
+    class Utf8StringWriter : StringWriter
+    {
+        /// <summary>UTF8 BOM無エンコード</summary>
+        private static readonly UTF8Encoding utf8NotBom = new UTF8Encoding(false);
+
+        /// <summary>エンコード</summary>
+        public override Encoding Encoding
+        {
+            get { return utf8NotBom; }
+        }
+    }
