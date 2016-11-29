@@ -1,21 +1,21 @@
-‡@Šî–{“I‚ÈÝ’è‚ð‹Lq
+â‘ åŸºæœ¬çš„ãªè¨­å®šã‚’è¨˜è¿°
 <!DOTYPE html>
 
-‡AWebƒy[ƒW‚ÌÝ’è‚ÆƒRƒ“ƒeƒ“ƒc‚Ì‹Lq‚ð—pˆÓ
+â‘¡Webãƒšãƒ¼ã‚¸ã®è¨­å®šã¨ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã®è¨˜è¿°ã‚’ç”¨æ„
 <html>
 <head>
 <body>
 
-‡BƒRƒ“ƒeƒ“ƒc‚ÌŒ¾Œê‚ÌŽí—Þ‚ðÝ’è
+â‘¢ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã®è¨€èªžã®ç¨®é¡žã‚’è¨­å®š
 <html lang="ja">
 
-‡CƒGƒ“ƒR[ƒh‚ÌŽí—Þ‚ðÝ’è
+â‘£ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã®ç¨®é¡žã‚’è¨­å®š
 <meta charset="UTF-8">
 
-‡Dƒy[ƒW‚Ìƒ^ƒCƒgƒ‹‚ÌÝ’è
+â‘¤ãƒšãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒˆãƒ«ã®è¨­å®š
 <title>
 
-‡EƒXƒ^ƒCƒ‹ƒV[ƒgƒtƒ@ƒCƒ‹‚ðŽw’è
+â‘¥ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®š
 <link rel="stylesheet" href="style.css">
 
 ================================
@@ -24,7 +24,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="" type="text/css">
-<title>ƒ^ƒCƒgƒ‹</title>
+<title>ã‚¿ã‚¤ãƒˆãƒ«</title>
 </head>
 <body>
 </body>
@@ -32,22 +32,22 @@
 ================================
 
 
-Webƒy[ƒW‚ª“Ç‚Ýž‚Ü‚ê‚éÛAJavaScript‚É‚æ‚Á‚Ä“®“I‚ÉWebƒy[ƒW‚ðì¬‚·‚éê‡
-¨HTML‚Ìbody•”‚É–„‚ßž‚Þ
+Webãƒšãƒ¼ã‚¸ãŒèª­ã¿è¾¼ã¾ã‚Œã‚‹éš›ã€JavaScriptã«ã‚ˆã£ã¦å‹•çš„ã«Webãƒšãƒ¼ã‚¸ã‚’ä½œæˆã™ã‚‹å ´åˆ
+â†’HTMLã®bodyéƒ¨ã«åŸ‹ã‚è¾¼ã‚€
 
-‚»‚Ì‘¼‚Ìê‡
-¨</body>ƒ^ƒO‚Ì’¼‘O•”‚É–„‚ßž‚ÞB
-@³‚µA<body>”z‰º‚ÅŒÄ‚Ño‚·•K—v‚ª‚ ‚éŠÖ”(ˆê˜A‚Ìˆ—‚ð‚Ü‚Æ‚ß‚½ƒvƒƒOƒ‰ƒ€)‚È‚Ç‚Í@<head>ƒ^ƒO”z‰º‚É–„‚ßž‚Þ
+ãã®ä»–ã®å ´åˆ
+â†’</body>ã‚¿ã‚°ã®ç›´å‰éƒ¨ã«åŸ‹ã‚è¾¼ã‚€ã€‚
+ã€€æ­£ã—ã€<body>é…ä¸‹ã§å‘¼ã³å‡ºã™å¿…è¦ãŒã‚ã‚‹é–¢æ•°(ä¸€é€£ã®å‡¦ç†ã‚’ã¾ã¨ã‚ãŸãƒ—ãƒ­ã‚°ãƒ©ãƒ )ãªã©ã¯ã€€<head>ã‚¿ã‚°é…ä¸‹ã«åŸ‹ã‚è¾¼ã‚€
 
 
--- ƒeƒ“ƒvƒŒ[ƒg --
+-- ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ --
 <!DOCTYPE html>
 <html>
 <head>
      <meta charset="UTF-8">
-     <title>ƒTƒ“ƒvƒ‹</title>
+     <title>ã‚µãƒ³ãƒ—ãƒ«</title>
      <script>
-          // ŠÖ”‚ð‹Lq‚·‚é
+          // é–¢æ•°ã‚’è¨˜è¿°ã™ã‚‹
           function test(){
                return 'Hey!!';
           }
@@ -55,7 +55,7 @@ Webƒy[ƒW‚ª“Ç‚Ýž‚Ü‚ê‚éÛAJavaScript‚É‚æ‚Á‚Ä“®“I‚ÉWebƒy[ƒW‚ðì¬‚·‚éê‡
 </head>
 <body>
      <script>
-          // Webƒy[ƒW‚ð “®“I‚ÉJavascript‚Åì¬‚·‚éê‡
+          // Webãƒšãƒ¼ã‚¸ã‚’ å‹•çš„ã«Javascriptã§ä½œæˆã™ã‚‹å ´åˆ
           document.write('<hr>');
           document.write('Hello world!!');
           document.write('<hr>');
@@ -63,7 +63,7 @@ Webƒy[ƒW‚ª“Ç‚Ýž‚Ü‚ê‚éÛAJavaScript‚É‚æ‚Á‚Ä“®“I‚ÉWebƒy[ƒW‚ðì¬‚·‚éê‡
      </script>
      <h>test</h>
      <script>
-          //‚±‚±‚É’Êí‚ÌJavaScript‚ð‹Lq‚·‚é
+          //ã“ã“ã«é€šå¸¸ã®JavaScriptã‚’è¨˜è¿°ã™ã‚‹
          
      </script>
 </body>

@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="UTF-8">
+     <title>サンプル</title>
+     <script>
+
+     </script>
+</head>
+<body>
+     <script>
+     	var scope = 'Global';
+        function getValue() {
+
+        	document.writeln(scope);
+        	var scope = 'Local';
+        	return scope;
+        }
+        document.writeln(getValue());
+        document.writeln(scope);
+     </script>
+     <h>ローカル変数は関数全体で有効</h>
+</body>
+</html>
