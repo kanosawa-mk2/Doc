@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>クロージャ</title>
+    <script>
+
+    </script>
+</head>
+<body>
+    <script>
+        function test(collback) {
+            alert("メソッド実行だお");
+            collback();
+        }
+
+        test(function () { alert("コールバック実行だお") });
+    </script>
+    <h>コールバック：引数として渡される関数</h>
+</body>
+</html>

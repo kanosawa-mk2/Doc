@@ -1,1 +1,6 @@
 http://qiita.com/harry0000/items/5f40acb2b3667cc275d4
+
+
+任意のところでデバッグを止める
+debbuger;
+

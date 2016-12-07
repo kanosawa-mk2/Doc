@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>プロトタイプ</title>
+    <script>
+    </script>
+</head>
+<body>
+    <h4>プロトタイプ</h4>
+    <p>Javascriptにはクラスがなくプロトタイプ「ひな形」が存在する。</p>
+
+    <p>Javascriptのクラス定義<br />
+    var Member = function(){};</p>
+
+    <p>インスタンス化<br />
+    var mem = new Member();</p>
+
+    <strong>Javascriptでは関数(Functionオブジェクト)にクラスとしての役割を与えている</strong>
+
+
+    <p>コンストラクタ<br />
+    オブジェクトを生成することを想定した関数オブジェクト</p>
+<pre>
+    var Member = function (firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.getName = function () {
+            return this.lastName + ' ' + this.firstName;
+        }
+    };
+    var mem = new Member('四方田', '春海');
+    document.writeln(mem.getName());
+</pre>
+
+    ↓実行結果↓<br/>
+    <script>
+        var Member = function (firstName, lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.getName = function () {
+                return this.lastName + ' ' + this.firstName;
+            }
+        };
+
+        var mem = new Member('四方田', '春海');
+        document.writeln(mem.getName());
+    </script>
+
+    <p>クラスのプロパティとメソッド</p>
+    <ul>
+        <li>プロパティ　→　値がオブジェクト</li>
+        <li>メソッド　　→　値が関数オブジェクト</li>
+    </ul> 
+    <p>上記の例では、firstNameがプロパティ、getNameがメソッド</p>
+
+    <a href="http://qiita.com/takeharu/items/809114f943208aaf55b3">JavaScriptの「プロトタイプ入門」</a>
+</body>
+</html>
