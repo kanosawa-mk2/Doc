@@ -64,7 +64,6 @@ Webページが読み込まれる際、JavaScriptによって動的にWebペー�
      <h>test</h>
      <script>
           //ここに通常のJavaScriptを記述する
-         
      </script>
 </body>
 </html>
