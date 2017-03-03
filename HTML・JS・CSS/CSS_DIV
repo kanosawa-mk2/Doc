@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="" type="text/css">
+<title>タイトル</title>
+<style>
+.a{
+position: absolute;
+width:100px;
+height:100px;
+background-color:red;
+
+}
+
+.b
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  //margin: auto;
+  background-color:blue;
+  width: 20px;
+  height: 20px;
+}
+
+</style>
+</head>
+<body>
+	<div class='a'>
+	<div class='b'>テスト</div>
+	</div>
+</body>
+</html>
