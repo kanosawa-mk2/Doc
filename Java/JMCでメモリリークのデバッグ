@@ -1,6 +1,6 @@
 https://docs.oracle.com/javase/jp/8/docs/technotes/guides/troubleshoot/memleaks001.html
 
-
+■Object ～の有効化
 1.\jre\lib\jfr\profile.jfcをコピーし「myprofile.jfc」とする。
 2.設定を書き換える。
     <event path="vm/gc/detailed/object_count_after_gc">
