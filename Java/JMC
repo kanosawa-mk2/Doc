@@ -14,6 +14,7 @@ Java Mission Control
 
 ・Java Flight Recorder
   JVMの実行時の動作を記録し、Java Flight Recorderツールを使用してオフラインで記録の分析を行います。
+  ※JFRを本番サーバーで有効にする場合は、商用ライセンスが必要です。
 
 ・プラグイン
   Mission Controlの機能を拡張するために様々な特殊プラグインをダウンロードしてインストールします。
