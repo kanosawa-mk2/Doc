@@ -1,0 +1,12 @@
+ Java Mission Control
+ 
+ JDKプロファイリングおよび診断ツール・プラットフォーム
+ 
+ ■出来ること
+ ・基本的なモニタリングと管理、および本番稼働時のプロファイリングと診断
+ 
+ Java管理コンソール(JMX)が実行中のJVMに接続し、主な特性をリアルタイムに収集して表示します。
+ JVMのユーザー指定のカスタム・アクションとルールのトリガーを設定します(JDK 8が必要)。
+ 
+ 
+ https://docs.oracle.com/javase/jp/8/docs/technotes/guides/troubleshoot/tooldescr002.html
