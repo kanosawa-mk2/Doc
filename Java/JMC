@@ -4,10 +4,7 @@ Java Mission Control
  Javaアプリケーションの管理、モニタリング、プロファイリングおよびトラブルシューティングを行うためのツール・スイートです。
  初回インストール時に、Java Mission ControlはJMXコンソールとJava Flight Recorderで構成されます。
  Mission Controlから他のプラグインを簡単にインストールできます。 
- 
-■出来ること
-・基本的なモニタリングと管理、および本番稼働時のプロファイリングと診断
- 
+
 ■JMCの３つの機能
 ・JMXコンソール
   JavaアプリケーションとJVMの実行時のモニターおよび管理を行います。
@@ -19,8 +16,7 @@ Java Mission Control
 ・プラグイン
   Mission Controlの機能を拡張するために様々な特殊プラグインをダウンロードしてインストールします。
  
- Java管理コンソール(JMX)が実行中のJVMに接続し、主な特性をリアルタイムに収集して表示します。
- JVMのユーザー指定のカスタム・アクションとルールのトリガーを設定します(JDK 8が必要)。
- 
+■起動方法
+ jdkにインストールフォルダの「/bin/jmc.exe」から起動できる。
  
  https://docs.oracle.com/javase/jp/8/docs/technotes/guides/troubleshoot/tooldescr002.html
