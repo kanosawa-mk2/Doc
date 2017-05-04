@@ -3,3 +3,9 @@ typeofとconstructor(instonceof)
 typeof･･･プリムティブ型しか判定できない(Objectの型がわからない)
 constructor(instonceof)･･･Objectの型がわかる、戻り値はコンストラクタ(Function)
 
+引数のデフォルト値の指定
+function triangle(base, height){
+ id(base == undefined) {base = 1;}
+ id(height == undefined) {height = 1;}
+ return base * height / 2;
+}
