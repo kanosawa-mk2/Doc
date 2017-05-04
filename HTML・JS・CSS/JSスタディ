@@ -34,3 +34,10 @@ function printf(format, var_args){
  document.writeln(format);
 }
 printf('こんにちは、{0}さん。私は{1}です。','智也','菊池');
+
+■再起呼び出し(arguments.calleeプロパティ)
+function factorial(n){
+ if(n != 0) { return n * arguments.callee(n-1);}
+ return 1;
+}
+doument.writeln(factorial(5)); // 120
