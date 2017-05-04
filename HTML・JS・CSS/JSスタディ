@@ -1,11 +1,36 @@
-型判定
+■型判定
 typeofとconstructor(instonceof)
 typeof･･･プリムティブ型しか判定できない(Objectの型がわからない)
 constructor(instonceof)･･･Objectの型がわかる、戻り値はコンストラクタ(Function)
 
-引数のデフォルト値の指定
+■引数のデフォルト値の指定
 function triangle(base, height){
  id(base == undefined) {base = 1;}
  id(height == undefined) {height = 1;}
  return base * height / 2;
 }
+
+■可変長引数
+// var_argsは仮の名前
+function sum(var_args){
+ var result = 0;
+ // 与えられた引数を順番に取り出し、順に加算処理
+ for(var i = 0; i < argument.length; i++){
+  if(isNaN(tmp)){
+   throw new Error('指定値が数値ではありません:' + tmp);
+  }
+  result += tmp;
+ }
+ return result;
+}
+■可変長引数２
+// var_argsは仮の名前
+function printf(format, var_args){
+ // 引数の２番目以降を順番に処理
+ for(var i = 1; i < arguments.length; i++){
+  var pattern = new RegExp('\\{' + ( i - 1) + '\\}', 'g');
+  format = format.replace(pattern, arguments[i]);
+ }
+ document.writeln(format);
+}
+printf('こんにちは、{0}さん。私は{1}です。','智也','菊池');
