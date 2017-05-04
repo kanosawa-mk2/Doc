@@ -1,0 +1,17 @@
+// 日付の加算/減算
+var dat = new Date(2010,4,15,11,4);
+document.writeln(dat.toLocaleString());
+document.writeln('<br/>');
+dat.setMonth(dat.getMonth() + 3);
+document.writeln(dat.toLocaleString());
+document.writeln('<br/>');
+dat.setDate(dat.getDate() -20);
+document.writeln(dat.toLocaleString());
+document.writeln('<br/>');
+
+// 日付/時刻の差分
+var dat1 = new Date(2010,4,15);
+var dat2 = new Date(2010,5,20);
+var diff = (dat2.getTime() - dat1.getTime()) / (1000 * 60 * 60 * 24);
+document.writeln(diff + '日の差');
+document.writeln('<br/>');
