@@ -1,0 +1,5 @@
+型判定
+typeofとconstructor(instonceof)
+typeof･･･プリムティブ型しか判定できない(Objectの型がわからない)
+constructor(instonceof)･･･Objectの型がわかる、戻り値はコンストラクタ(Function)
+
