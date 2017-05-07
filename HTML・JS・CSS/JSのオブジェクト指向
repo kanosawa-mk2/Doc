@@ -1,0 +1,83 @@
+■最もシンプルなクラス(コンストラクタ)
+var Member = function() {};
+
+■インスタンス化
+var mem = new Member();
+
+■プロパティとメソッド
+// クラス(コンストラクタ)
+var Member = function(firstName, lastName){
+ // プロパティ
+ this.firstName = firstName;
+ this.lastName = lastName;
+ // メソッド
+ this.getName = function(){
+  return this.lastName + ' ' + this.firstName;
+ }
+}
+
+var mem = new Member('テスト','太郎');
+document.writeln(mem.getName());
+
+■動的メソッドの追加
+var Member = function(firstName, lastName){
+ // プロパティ
+ this.firstName = firstName;
+ this.lastName = lastName;
+}
+
+mem.getName = function(){
+ return this.lastName + ' ' + this.firstName;
+}
+ 
+■prototypeプロパティ◎
+var Member = function(firstName, lastName){
+ // プロパティ
+ this.firstName = firstName;
+ this.lastName = lastName;
+}
+
+Member.prototype.getName = function(){
+ return this.lastName + ' ' + this.firstName;
+}
+ 
+var mem = new Member('テスト','太郎');
+document.writeln(mem.getName());
+
+■静的プロパティ/静的メソッド
+var Area = function () {};
+
+Area.version = '1.0'; // 静的プロパティの定義
+
+//静的メソッドの定義
+Area.triangle = function(base, height){
+ retrun base * height / 2;
+}
+
+document.writlen('Areaクラスのバージョン:' + Area.version); 
+document.writlen('三角形の面積:' + Area.triangle(5,3));
+
+■プロパティの削除
+var Member = function(){};
+
+Member.prototype.sex = '男';
+var mem = new Member();
+mem.sex = '女';
+delete mem.sex // プロパティの削除
+document.writlen(mem.sex);　// 男
+
+// プロトタイププロパティの削除
+delete Member.prototype.sex
+document.writlen(mem.sex);　// (なし)
+
+■オブジェクトリテラルでプロトタイプを宣言◎
+var Member = function(firstName, lastName){
+ this.firstName = firstName;
+ this.lastName = lastName;
+}
+
+Member.prototype = {
+ getName = function(){return this.lastName + ' ' + this.firstName;},
+ toString = function(){return this.lastName + this.firstName;}
+};
+ 
