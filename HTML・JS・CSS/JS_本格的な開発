@@ -79,4 +79,19 @@ t.setBase(10);
 t.setHeight(2);
 document.writeln(t.getArea()); // 10
 
+■名前空間/パッケージを作成
+var Wings = function() {};
 
+Wings.Member = function(firstName, lastName){
+ this.firstName = firstName;
+ this.lastName = lastName;
+};
+
+Wings.Member.prototype = {
+ getName : function(){
+  return this.lastName + ' ' + thsi.firstName;
+ }
+};
+
+var mem = new Wings.Member('テスト', '太郎');
+document.writeln(mem.getName()); // 太郎　テスト
