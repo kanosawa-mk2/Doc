@@ -1,0 +1,15 @@
+■イベント登録
+<script type="text/javascript">
+<!--
+windows.onlad = function() {
+ document.getElementById('btn').onclick = function(){
+  windows.alert('ボタンがクリックされました')；
+ };
+};
+//-->
+</script>
+<inpt type='button' id='btn' value='ダイアログ表示' />
+
+// イベント標準の動作をキャンセル
+<body oncontextmenu='return false;'>
+</body>
