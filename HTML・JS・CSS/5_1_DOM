@@ -72,4 +72,80 @@ DOMはドキュメントを文書ツリーをして扱う
   ・いったん設定したイベントリスナを削除できる
 
  ▼イベントリスナを登録する
+  要素.attachEvent(イベント名, イベントハンドラ)                         //IE用
+　要素.addEventListener(イベント名, イベントハンドラ, イベントの伝達方法)  //IE以外
+ 
+ <script type='text/javascript'>
+ <!--
+  function addListener(elem, ev, listener) {
+   if(elem.addEventListener){
+    elem.addEventListener(ev, listener, false);
+   } else if(elem.attachEvent){
+    elem.attachEvent('on' + ev, listener); // IE用
+   } else {
+    throw new Error('イベントリスナに未対応です');
+   }
+  }
+  
+  // ページロード時のイベントリスナをしてinit関数を登録
+  addListener(window, 'load', init);
+  
+  // ボタンクリック時用function
+  function init(){
+   addListener(document.getElementById('btn'), 'click' , function() {
+    window.alert('ボタンがクリックされました');
+   });
+  }
+  //-->
+  </script>
+  <input type='button' id='btn' value='ダイアログ表示' />
+
+ ▼イベントリスナを削除する
+  要素.detachEvent(イベント名, イベントハンドラ)                         //IE用
+　要素.removeEventListener(イベント名, イベントハンドラ, イベントの伝達方法)  //IE以外
+ 
+  function removeListener(elem, ev, listener) {
+   if(elem.removeEventListener){
+    elem.removeEventListener(ev, listener, false);
+   } else if(elem.detachEvent){
+    elem.detachEvent('on' + ev, listener); // IE用
+   } else {
+    throw new Error('イベントリスナに未対応です');
+   }
+  }
+  
+ ▼イベントに関わる情報を取得　Eventオブジェクト
+  getSource(e) {
+   if(e.target) {
+    return w.target;                //IE以外のブラウザ
+   } else if(window.event) {
+    return window.event.srcElement; //IE用
+   }
+  }
+  
+ ▼上位要素へのイベント伝播を抑制
+ 　バブリング･･･デフォルトでは、ページ上で発生したイベントは、上位の要素にも通知される。
+  
+  cancelBubbleプロパティ  // IE用
+  stopPropagationメソッド // IE以外のブラウザ
+  
+  function cancelBubbling(e) {
+   if (e.stopPropagation) {
+    e.stopPropagation();
+   } else if(window.event) {
+    window.event.cancelBubble = true;
+   }
+
+ ▼イベントデフォルトの挙動を抑止する
+  入力チェックエラー時にサブミットをキャンセルしたい場合など
+  
+ 　retrunValueプロパティ   //IE用
+   preventDefaultメソッド  // IE以外のブラウザ
+  
+   function cancelEvent(e) {
+    if (e.preventDefault) {
+     e.preventDefault();
+    } else if(window.event) {
+     window.event.retrunValue = true;
+    }
   
