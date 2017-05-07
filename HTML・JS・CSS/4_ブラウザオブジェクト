@@ -13,3 +13,35 @@ windows.onlad = function() {
 // イベント標準の動作をキャンセル
 <body oncontextmenu='return false;'>
 </body>
+
+■Windowオブジェクト(windowsは省略可能)
+ ▼ダイアログ表示
+  alert,confirm,promptメソッド
+ 
+ ▼別ウィンドウ表示
+  openメソッド
+  
+  // 引数　window.open(URL , ウィンドウ名, オプション);
+  // オプション
+  // width ･･･ ウィンドウの幅
+  // height ･･･ ウィンドウの高さ
+  // scrollbars ･･･ スクロールバーを表示するか(yes|no)
+  // location ･･･ アドレスバーを表示するか(yes|no)
+  // resizable ･･･ ウィンドウサイズは変更可能か(yes|no)
+  // toolbar ･･･ ツールバーを表示するか(yes|no)
+  // status ･･･ ステータスバーを表示するか(yes|no)
+  // menubar ･･･ メニューバーを表示するか(yes|no)
+  subwin = window.open('http//xxxxxx','Sample','width=600,height=300,scrollbars=yes, location=yes');
+ 
+ ▼タイマー機能
+  setInterval,setTimeoutメソッド
+ 
+ ▼ウィンドウサイズやスクロール位置を操作
+  meveBy,moveTo,resizeBy,resizeTo,scrollBy,scrollTo,blur,focus,printメソッド
+  blurウィンドからフォーカスを外す
+ 
+ ▼ステータスを操作する
+  statusメソッド
+
+■Formオブジェクト
+
