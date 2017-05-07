@@ -1,0 +1,29 @@
+■DOM(Document Object Model)
+ HTMLやXMLのようなマークアップ言語で書かれたドキュメントにアクセスするための「標準的な」しくみ
+ クロスブラウザ環境でも互換性の高いコードを記述できる
+
+DOMはドキュメントを文書ツリーをして扱う
+　★文書ツリーの解釈はブラウザ毎に違う
+
+■DOMの３つのレベル
+ W3C(World Wide Web Consortium)が標準化
+ Levael･･･ノードの参照/追加/置換/削除などの基本機能を定義
+ Levae2･･･Level1に、スタイル操作やイベントモデル、ノードの範囲指定などの機能を追加
+ Levae3･･･Level2に、XPath、妥当性の検証、読み込み/保存などの機能を追加
+
+■特定のノードを取得
+ ダイレクトアクセス･･･IDやタグ名で目的の要素を直接取得
+ ノードウォーキング･･･ある要素を起点に子、親、兄弟要素を相対的に取得
+
+ ▼ID値で検索
+  document.getElementById // 戻り値 Nodeオブジェクト
+  
+ ▼タグ名で検索
+  document.getElementsByTagName //戻り値 NodeListオブジェクト
+  
+ ▼class属性で検索
+  document.getElementsByClassName // 戻り値 NodeListオブジェクト
+  
+ ▼相対的な位置で検索
+  [5_2_相対的なノードの取得] 参照
+  
