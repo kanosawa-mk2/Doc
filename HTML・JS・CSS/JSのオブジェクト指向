@@ -80,4 +80,18 @@ Member.prototype = {
  getName = function(){return this.lastName + ' ' + this.firstName;},
  toString = function(){return this.lastName + this.firstName;}
 };
+
+■継承(プロトタイプチェーン)
+var Animal = function() {};
+Animal.prototype = {
+ walk : function() { document.writeln('トコトコ...')};
+};
+
+var Doc = function() {};
+Doc.prototype = new Animal();　// プロトタイプにインスタンスを設定(Animalを継承)
+Doc.prototype.bark = function() { document.writeln('ワンワン!');};
+
+var d = new Doc();
+d.walk(); // トコトコ
+d.bark(); // ワンワン
  
