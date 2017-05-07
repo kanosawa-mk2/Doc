@@ -45,3 +45,88 @@ windows.onlad = function() {
 
 ■Formオブジェクト
 
+ ▼フォーム要素へのアクセスの基本
+  function process(){
+   var name = document.fm.name.value; // document.フォーム名.要素名
+   windows.alert(name);
+   return false; //イベントキャンセル
+  }
+  
+  <form name='fm' "return process()">
+   <input type='txet' name='name' size='10' />
+   <input type='submit' value='送信' />
+  </form>
+  
+  !その他書き方
+  document.forms[0].elements[0].value
+  document.forms['fm'].elements['name'].value
+  document['fm']['name'].value
+  
+  !別ウィンドウの要素にアクセスする
+  subwin.opener.document.fm. //親ウィンドウを参照
+  subwin.document.fm         //サブウィンドウ(subwin)を参照(openメソッドの戻り値)
+  
+ ▼現在のフォームを参照
+  formプロパティ
+  
+  function process(f){
+   var name = f.name.value; // document.フォーム名.要素名
+   windows.alert(name);
+   return false;
+  }
+  
+  <form name='fm' "return process()">
+   <input type='txet' name='name' size='10' />
+   <input type='submit' value='送信' onclick'process(this.form)' />
+  </form>
+ 
+■Locationオブジェクト
+ ▼現在のページを移動
+  href,replaceプロパティ
+ 
+ ▼クエリ情報を取得
+  searchプロパティ
+   ?XXX=1234
+   
+   //クエリを解析するJS
+   function $q(){
+    var result = {};
+    var str = location.search.substring(1);
+    var params = str.split('&');
+    for(var i = 0; i < params.length; i++){
+     var ky = param[i].split('=');
+     result[ky[0]] = documentURIComponent(ky[1]);
+    }
+    var q = $q();
+    document.writeln('id:' + q['id']);
+   
+■Documentオブジェクト
+ ★できるだけDOMで代替できるものはDOMを利用する
+ 
+ ▼クッキーを取得/記録
+  document.cookie
+  
+■History/Navigator/Screenオブジェクト
+ 
+ ▼履歴に沿ってページ前後に移動　Historyオブジェクト
+   <a herf='Javascript:history.back()'>戻る</a>
+   <a herf='Javascript:history.forward()'>進む</a>
+   
+   //別の書き方
+   <a herf='Javascript:void(0)' onclick='history.back()'>戻る</a>　// void(0) リンクの動作を抑止
+ 
+ ▼ブラウザ情報を取得 Navigatorオブジェクト
+  userAgentプロパティ ユーザエージェント名
+ 
+ 　★機能テストの手法
+   if(elem.attachEvent){
+    // attachEventメソッドが利用出来る場合のコード
+   } else if(elem.addEventListener){
+    // addEventListenerメソッドが利用出来る場合のコード
+   } else {
+    // いずれのメソッドも利用できない場合のコード
+   }
+ 
+ ▼スクリーン情報を取得 Screenオブジェクト
+ 　
+ 
