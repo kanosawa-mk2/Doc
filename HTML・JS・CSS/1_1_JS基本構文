@@ -41,3 +41,27 @@ function factorial(n){
  return 1;
 }
 doument.writeln(factorial(5)); // 120
+
+■高階関数(関数を引数、戻り値として扱う関数)
+// 高階関数を定義
+function arrayWalk(data, f){
+ for(var key in data){
+  f(key, data[key]);
+ }
+}
+
+function showElemnt(key, value){
+ document.writeln(key + ':' + value);
+}
+
+var ary = [2,2,4,5];
+arrayWalk(ary, showElemnt);
+
+■クロージャ(シンプルなオブジェクト)
+function closure(init){
+ var counter = init;
+ 
+ return function() {
+  return ++counter;
+ }
+}
