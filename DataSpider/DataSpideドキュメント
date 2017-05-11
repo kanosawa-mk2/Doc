@@ -40,6 +40,38 @@ https://dstn.appresso.com/hc/ja
       `y_name` VARCHAR(45) NULL,
       `price` INT NULL,
       `unit` VARCHAR(45) NULL,
+      `farmer_email` VARCHAR(45) NULL,
+      PRIMARY KEY (`y_code`));
+      
+      CREATE TABLE `scott`.`m_yasai` (
+      `y_code` VARCHAR(20) NOT NULL,
+      `y_name` VARCHAR(45) NULL,
+      `price` INT NULL,
+      `unit` VARCHAR(45) NULL,
       `e_mail` VARCHAR(45) NULL,
       PRIMARY KEY (`y_code`));
+
+     CREATE TABLE `scott`.`t_orderer` (
+     `oder_date` DATETIME NOT NULL,
+     `oder_email` VARCHAR(45) NOT NULL,
+     `oder_name` VARCHAR(45) NULL,
+     PRIMARY KEY (`oder_date`, `oder_email`));
+
+     CREATE TABLE `scott`.`t_oder_detail` (
+     `oder_date` DATETIME NOT NULL,
+     `oder_email` VARCHAR(45) NOT NULL,
+     `y_code` VARCHAR(45) NOT NULL,
+     `num` INT NULL,
+     `unit` VARCHAR(45) NULL,
+     `price` INT NULL,
+     `money` INT NULL,
+     PRIMARY KEY (`oder_date`, `oder_email`, `y_code`));
+
+
+    CREATE TABLE `scott`.`m_nouka` (
+    `farmer_email` VARCHAR(45) NOT NULL,
+    `farmer_name` VARCHAR(45) NULL,
+    `password` VARCHAR(45) NULL,
+    `k_code` INT NULL,
+    PRIMARY KEY (`farmer_email`));
 
