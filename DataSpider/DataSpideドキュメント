@@ -33,4 +33,13 @@ https://dstn.appresso.com/hc/ja
        b.$DATASPIDER_HOME/server/plugin/data_processing/modules/mysql51_adapterディレクトリ直下に必要なライブラリ群をコピーします。
        c.DataSpiderServerおよびDataSpider Studioを起動します。
 
+   4.テストテーブルの作成
+     
+     CREATE TABLE `scott`.`m_yasai` (
+      `y_code` VARCHAR(20) NOT NULL,
+      `y_name` VARCHAR(45) NULL,
+      `price` INT NULL,
+      `unit` VARCHAR(45) NULL,
+      `e_mail` VARCHAR(45) NULL,
+      PRIMARY KEY (`y_code`));
 
