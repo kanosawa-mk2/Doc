@@ -4,6 +4,33 @@ https://dl.appresso.com/book_html/
 DataSpider Technical Network
 https://dstn.appresso.com/hc/ja
 
-MYSQL5.1
-http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-5.1/
-http://d.hatena.ne.jp/sh2/20090830
+■DataSpider 実践入門(2007年7月発刊) 体験版 環境構築
+ 
+ ▼インストール・ライブラリ
+  ・Dataspider 3.0
+    https://dl.appresso.com/book_html/
+  
+  ・MySQL5.1
+    http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-5.1/
+    mysql-noinstall-5.1.73-win32.zip
+    
+  ・MySQL5.1 ドライバ
+    
+ ▼セットアップ
+   1. Dataspiderをインストール
+      https://dl.appresso.com/book_html/を参照
+      
+      ★注意点：DataSpider起動時は管理者として実行
+   
+   2.MySQL5.1をセットアップ
+     http://d.hatena.ne.jp/sh2/20090830
+     
+   3.MySQL5.1 ドライバ設定
+     ライブラリ
+     mysql-connector-java-5.1.42-bin.jar
+     
+       a.DataSpiderServerおよびDataSpider Studioを停止します。
+       b.$DATASPIDER_HOME/server/plugin/data_processing/modules/mysql51_adapterディレクトリ直下に必要なライブラリ群をコピーします。
+       c.DataSpiderServerおよびDataSpider Studioを起動します。
+
+
