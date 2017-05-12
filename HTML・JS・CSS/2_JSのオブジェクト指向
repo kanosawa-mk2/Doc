@@ -100,4 +100,33 @@ Doc.prototype.bark = function() { document.writeln('ワンワン!');};
 var d = new Doc();
 d.walk(); // トコトコ
 d.bark(); // ワンワン
+
+■new 継承(Object.create)
+function Animal = function() {};
+Animal.prototype = {
+ walk : function() { document.writeln('トコトコ...')};
+};
+
+function Doc(){
+  Animal.apply(this,arguments);
+}
+
+Doc.protptype = Object.create(Animal.prototype,{
+  constructor:{
+    value:Doc
+  },
+  bark: {
+    value: function () {
+        alert(this.name + " is sleeping.");
+    }
+  }
+});
+
+var d = new Doc();
+d.walk(); // トコトコ
+d.bark(); // ワンワン
+
+・・・楽になっているか？もう少し勉強しよう
+http://knowledge.reontosanta.com/archives/864
+
  
