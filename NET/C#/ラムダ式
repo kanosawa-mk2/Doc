@@ -1,0 +1,67 @@
+class Program
+    {
+        static void Main(string[] args)
+        {
+            var a = new List<B>();
+            a.Add(new B { Hoge1 = 1, Hoge2 =10 });
+            a.Add(new B { Hoge1 = 2, Hoge2 = 11 });
+            a.Add(new B { Hoge1 = 3, Hoge2 = 12 });
+            a.Add(new B { Hoge1 = 4, Hoge2 = 13 });
+            a.Add(new B { Hoge1 = 5, Hoge2 = 14 });
+            a.Add(new B { Hoge1 = 6, Hoge2 = 15 });
+
+            a = test(a, x => x.Hoge1 >= 3 && x.Hoge2 <= 14);
+            a.ForEach(x => Console.WriteLine(x));
+
+            Console.WriteLine();
+
+            a = test(a, getFuncIsUnreferenced(3,15));
+            a.ForEach(x => Console.WriteLine(x));
+
+            Console.WriteLine();
+
+            a = test(a, isUnreferenced);
+            a.ForEach(x => Console.WriteLine(x));
+
+            Console.WriteLine();
+
+            a.ForEach(x => x.Hoge3 = Math.Pow(x.Hoge1,2) > x.Hoge2);
+            a.ForEach(x => Console.WriteLine(x));
+
+            Console.ReadKey();
+        }
+
+        static Func<B, bool> isUnreferenced = x => x.Hoge1 >= 3 && x.Hoge2 <= 14;
+
+        private static Func<B, bool> getFuncIsUnreferenced(int a, int b)
+        {
+            return x => x.Hoge1 >= a && x.Hoge2 <= b;
+        }
+
+        static List<T> test<T>(List<T> a, Func<T, bool> isUnreferenced)
+        {
+            return a.Where(isUnreferenced).ToList();
+        }
+
+        static B test2(int a, int b)
+        {
+            return new B
+            {
+                Hoge1 = a,
+                Hoge2 = b
+            };
+        }
+
+        class B
+        {
+            public int Hoge1 {get;set;}
+            public int Hoge2 { get; set; }
+            public bool Hoge3 { get; set; }
+
+            public override string ToString()
+            {
+                return Hoge1 + " " + Hoge2 + " " + Hoge3;
+            }
+
+        }
+    }
