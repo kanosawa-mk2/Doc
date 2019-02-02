@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="deploy" name="SampleWeb">
+
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓最後に追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+	<target depends="build" name="deploy">
+		<war destfile="./test.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent" />
+			<classes dir="build/classes" />
+		</war>
+	</target>
+↑↑↑↑↑↑↑↑↑↑↑↑↑↑最後に追加↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+</project>
