@@ -1,0 +1,27 @@
+■環境インストール
+1.トーラスGitインストール
+2.トーラスGit(日本語化パッチ)インストール
+3.トーラスGit起動時にGitのインストールを聞かれるのでインストール
+
+■ssh設定
+1.Gitコマンドでssh鍵を作成
+  GitBushで以下のコマンドを登録　GitBush･･･Gitをインストールするとプログラム一覧に存在する
+  $cd ~/.ssh
+  $ssh-keygen -t rsa
+  エンターキー3回
+2.公開鍵をGithabに登録
+  鍵の中身のクリップボードへのコピー
+  $ clip < ~/.ssh/id_rsa.pub (Windows)
+  
+  https://github.com/settings/ssh
+
+■トーラスGitでつなげるように設定
+1.TortoiseGitに付属しているputtygen.exeを起動する。
+2.「File」→「Load private key」を選択して、ファイルの種類で「All Files」を選択し、先ほど C:\Documents and Settings\ユーザ名\.ssh\ の位置に置いたOpenSSH形式の秘密鍵（id_rsaなど）を開く。
+3.秘密鍵を使うためのパスフレーズの入力を求められるので、パスフレーズを入力する。
+4.「Successfully imported foreign key (OpenSSH SSH-2 private key).」といったメッセージが表示され、秘密鍵がインポートされる。
+5.「Save private key」ボタンをクリックして、PuTTY形式の秘密鍵を「id_rsa.ppk」などのファイル名で保存する。
+6.タスクトレイに表示されている「Pageant（PuTTY authentication agent）」をダブルクリックし、Pageantのキーリストを開く。
+7.「Add Key」ボタンをクリックし、先ほど保存したPuTTY形式の秘密鍵（id_rsa.ppk など）を選択する。
+8.秘密鍵を使うためのパスフレーズの入力を求められるので、パスフレーズを入力する。
+9.TortoiseGitの設定ダイアログを開き、「Network」の「SSH client」にTortoiseGit付属のTortoisePlink.exeを指定する。
