@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="out_war" name="webtop_v16_4">
+
+	<!-- ビルド設定 -->
+	<property file="C:\pleiades4.8\workspace\00_UnitTestPj\build.properties" />
+
+	<property environment="env" />
+	<property name="common_src.link" value="${src_phase1.pathvariable}/common/src" />
+	<property name="src.link" value="${src_phase1.pathvariable}/webtop/src" />
+
+	<property name="custom.link" value="${src_phase1.pathvariable}/webtop/custom" />
+	<property name="tlds.link" value="${src_phase1.pathvariable}/webtop/WEB-INF/tlds" />
+
+	<!-- svn設定 -->
+	<property name="svn.path" value="${src_phase1.pathvariable}" />
+
+	<!-- svntaskのjar読込 -->
+	<path id="path.svntask">
+		<fileset dir="C:\pleiades4.8\workspace\00_UnitTestPj\svntask-1.0.8">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- ant内でsvntaskタスクを定義 -->
+	<taskdef resource="com/googlecode/svntask/svntask.xml" classpathref="path.svntask" />
+
+	<!-- classpath 設定 -->
+	<path id="Web App ライブラリー.libraryclasspath">
+		<fileset dir="WebContent/WEB-INF/lib" includes="*.jar"/>
+		<pathelement location="WebContent/WEB-INF/classes" />
+	</path>
+
+	<path id="Apache Tomcat v9.0 [Apache Tomcat v9.0.8].libraryclasspath">
+		<fileset dir="../../tomcat/apache-tomcat-9.0.8/lib" includes="*.jar"/>
+	</path>
+
+	<path id="webtop_v16_4.classpath">
+		<pathelement location="build/classes" />
+		<path refid="Web App ライブラリー.libraryclasspath" />
+		<path refid="Apache Tomcat v9.0 [Apache Tomcat v9.0.8].libraryclasspath" />
+	</path>
+
+	<!-- クリーン -->
+	<target name="clean">
+		<delete dir="build/classes" />
+		<delete dir="work" />
+	</target>
+
+	<!-- 初期化 -->
+	<target name="init">
+		<echo message="${src_phase1.pathvariable}"/>
+		<echo message="${common_src.link}"/>
+		<echo message="${src.link}"/>
+		<echo message="${compiler}"/>
+
+
+		<!-- フォルダ作成 -->
+		<mkdir dir="build/classes" />
+
+		<!-- build/classesへjava以外(設定系)のコピー -->
+		<copy includeemptydirs="false" todir="build/classes">
+			<fileset dir="${common_src.link}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="build/classes">
+			<fileset dir="${src.link}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ビルド -->
+	<target depends="init" name="build-project">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}" encoding="${ENCODING}" executable="${compiler}">
+			<src path="${common_src.link}" />
+			<src path="${src.link}" />
+			<classpath refid="webtop_v16_4.classpath" />
+		</javac>
+	</target>
+
+	<!-- リンクされたリソースファイル要に作業ディレクトリにコピー -->
+	<target name="copyworkdir">
+		<mkdir dir="work" />
+		<!-- includeemptydirs falseにすると、空のディレクトリーは転送先で削除される。 -->
+		<copy includeemptydirs="false" todir="work/WebContent" overwrite="yes">
+			<fileset dir="WebContent" />
+		</copy>
+		<copy includeemptydirs="false" todir="work/WebContent/custom" overwrite="yes">
+			<fileset dir="${custom.link}" />
+		</copy>
+		<copy includeemptydirs="false" todir="work/WebContent/WEB-INF/tlds" overwrite="yes">
+			<fileset dir="${tlds.link}" />
+		</copy>
+
+	</target>
+
+	<!-- バージョンファイル出力 -->
+	<target name="outputVersionFile">
+		<svn>
+			<info path="${svn.path}" revisionProperty="revisionVersion" />
+		</svn>
+		<echo file="work/WebContent/appversion" message="${revisionVersion}" />
+	</target>
+
+	<!-- ビルドセット -->
+	<target depends="clean,build-project" name="build" />
+
+	<!-- WAR作成 -->
+	<target depends="build,copyworkdir,outputVersionFile" name="out_war">
+		<war destfile="./webtop.war" webxml="work/WebContent/WEB-INF/web.xml">
+			<fileset dir="work/WebContent" />
+			<classes dir="build/classes" />
+		</war>
+	</target>
+
+
+
+</project>

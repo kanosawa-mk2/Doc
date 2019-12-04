@@ -1,0 +1,1 @@
+for /f "tokens=1* delims= usebackq" %%d in (`"dir %1 /ad/b/s | sort /R"`) do rd "%%d"

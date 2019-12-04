@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sample" default="all" basedir=".">
+	<!-- 注意：実行前に以下の設定を行うこと -->
+	<!-- ①自動的にビルドのチェックを外すこと -->
+	<!-- ②実行の構成からJREタブで「ワークスペースと同じJREで実行」にチェックをいれること -->
+	<!-- 参考：http://qiita.com/peanuts2013/items/8715166d655a2c66c740 -->
+	<!-- 参考：http://qiita.com/shela/items/2eb2f1ea5f1f1f58eccc -->
+	<!-- 参考：http://www.sdmemo.com/wiki/Ant%E3%81%A7Subversion%E3%81%AE%E3%83%AA%E3%83%93%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%92%E5%8F%96%E5%BE%97#SVNKit -->
+	<!-- svntask取得先：https://code.google.com/archive/p/svntask/ -->
+	<!-- svnkit取得先：http://svnkit.com/ -->
+
+	<!-- ビルド設定 -->
+	<property file="C:\pleiades4.8\workspace\00_UnitTestPj\build.properties" />
+
+	<!-- svn設定 -->
+	<property name="svn.oldrevision" value="3858" />
+
+	<!--出力フォルダ -->
+	<property name="workdir" location="./work" />
+	<property name="workdir.old" location="${workdir}/old" />
+	<property name="workdir.new" location="${workdir}/new" />
+	<property name="workdir.output" location="${workdir}/webtop" />
+
+	<!-- svntaskのjar読込 -->
+	<path id="path.svntask">
+		<fileset dir="C:\pleiades4.8\workspace\00_UnitTestPj\svntask-1.0.8">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- ant内でsvntaskタスクを定義 -->
+	<taskdef resource="com/googlecode/svntask/svntask.xml" classpathref="path.svntask" />
+
+
+	<!-- 初期化 -->
+	<target name="init">
+		<echo message="${src_phase1.pathvariable}"/>
+		<echo message="${svn.url.phase1}"/>
+		<echo message="${svn.oldrevision}"/>
+		<delete dir="${workdir.old}" />
+		<delete dir="${workdir.new}" />
+		<delete dir="${workdir.output}" />
+	</target>
+
+	<!-- all 全て実行 -->
+	<target name="all" depends="init">
+		<!-- SVNを旧バージョンにSwitch -->
+		<antcall target="svnSwitchOld" />
+		<!-- ビルド -->
+		<subant target="build-project">
+	      <fileset dir="." includes="build.xml" />
+	    </subant>
+		<!-- 旧ビルドファイルをコピー -->
+		<antcall target="copyOldClass" />
+		<!-- 旧カスタムファイルをコピー -->
+		<antcall target="copyOldCustom" />
+		<!-- SVNを新バージョンにSwitch -->
+		<antcall target="svnSwitchNew" />
+		<!-- ビルド -->
+		<subant target="build-project">
+	      <fileset dir="." includes="build.xml" />
+	    </subant>
+		<!-- 新ビルドファイルをコピー -->
+		<antcall target="copyNewClass" />
+		<!-- 新カスタムファイルをコピー -->
+		<antcall target="copyNewCustom" />
+		<!-- バージョンファイル出力 -->
+		<antcall target="outputVersionFile" />
+		<!-- 新旧の差分をコピー -->
+		<antcall target="diffCopy" />
+		<!-- 空フォルダ削除 -->
+		<exec executable="${cleanbat.path}">
+			<arg value="${workdir.output}" />
+		</exec>
+	</target>
+
+	<!-- pahse1のSVNを旧バージョンにSwitch -->
+	<target name="svnSwitchOld">
+		<svn>
+			<switch svnurl="${svn.url.phase1}" revision="${svn.oldrevision}" path="${src_phase1.pathvariable}" />
+		</svn>
+	</target>
+
+	<!-- pahse1のSVNを新バージョンにSwitch -->
+	<target name="svnSwitchNew">
+		<svn>
+			<switch svnurl="${svn.url.phase1}" path="${src_phase1.pathvariable}" />
+		</svn>
+	</target>
+
+	<!--旧クラスファイルコピー -->
+	<target name="copyOldClass">
+		<mkdir dir="${workdir.old}/WEB-INF/classes" />
+		<copydir src="build/classes" dest="${workdir.old}/WEB-INF/classes" />
+	</target>
+
+	<!--旧カスタム設定ファイルコピー -->
+	<target name="copyOldCustom">
+		<mkdir dir="${workdir.old}/custom" />
+		<copydir src="${src_phase1.pathvariable}/webtop/custom" dest="${workdir.old}/custom" />
+	</target>
+
+	<!--新クラスファイルコピー -->
+	<target name="copyNewClass">
+		<mkdir dir="${workdir.new}/WEB-INF/classes" />
+		<copydir src="build/classes" dest="${workdir.new}/WEB-INF/classes" />
+	</target>
+
+	<!--新カスタム設定ファイルコピー -->
+	<target name="copyNewCustom">
+		<mkdir dir="${workdir.new}/custom" />
+		<copydir src="${src_phase1.pathvariable}/webtop/custom" dest="${workdir.new}/custom" />
+	</target>
+
+	<!-- バージョンファイル出力 -->
+	<target name="outputVersionFile">
+		<svn>
+			<info path="${svn.path}" revisionProperty="revisionVersion" />
+		</svn>
+		<echo file="${workdir.new}/appversion" message="${revisionVersion}" />
+	</target>
+
+	<!-- 差分ファイルの取得 -->
+	<target name="diffCopy">
+		<mkdir dir="${workdir.output}" />
+		<fileset id="diffFiles" dir="${workdir.new}">
+			<!-- includes(収集対象となるファイルを指定。「**」を指定すると、サブディレクトリーを含む) -->
+			<include name="**/*" />
+			<!-- exclude(収集対象外となるファイルを指定。「**」を指定すると、サブディレクトリーを含む) -->
+			<exclude name="**/*.txt" />
+			<!-- ignoreFileTimes（TRUE=時間差は無視） -->
+			<different targetdir="${workdir.old}" ignoreFileTimes="true" />
+		</fileset>
+		<!-- 差分ファイルのコンソール出力 -->
+		<echo message="${toString:diffFiles}" />
+		<!-- 差分ファイルのコピー -->
+		<copy todir="${workdir.output}">
+			<fileset refid="diffFiles">
+			</fileset>
+		</copy>
+	</target>
+
+</project>
