@@ -4,8 +4,6 @@
 env.bat
 ------------------------------------------------------------
 set JAVA_V="C:\Program Files\Java\jdk1.8.0_60\bin\java"
-set XMS=64m
-set XMX=512m
 
 set CLASSPATH=.\bin
 
