@@ -1,0 +1,12 @@
+Java Flight Recorder
+ javaのメモリ状況などを記録できるツール
+ 
+ 以下を引数にしていすると「myrecording.jfr」というファイルが作成される
+ -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=60s,filename=myrecording.jfr
+ 
+ 例：
+ java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=60s,filename=myrecording.jfr MyApp
+
+
+Java Flight Recorderの実行
+https://docs.oracle.com/javacomponents/jp/jmc-5-5/jfr-runtime-guide/run.htm
