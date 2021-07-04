@@ -1,0 +1,10 @@
+■通信情報を調べる　netstat
+netstat -a
+
+■コンピュータのアドレス情報を表示する　arp/netsh
+arp -a
+netsh interface ipv6 show neighbors
+ipconfig /all
+
+■コンピュータの経路を表示する tracert
+tracert github.com

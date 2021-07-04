@@ -1,0 +1,3 @@
+1.Node.js インストール
+2.npc install -g typescript
+3.tsc --target es6 ts_script.ts
