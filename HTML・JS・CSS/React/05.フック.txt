@@ -1,0 +1,31 @@
+フック
+
+■useState
+  stateとstateを更新する関数を返すフック
+
+import React, { useState } from 'react';
+
+const [count, setCount] = useState(0)
+
+<p>Count: {count}</p>
+<button onClick={()=> setCount(count + 1)}>click</button>
+
+■useEffect
+ コンポーネントに副作用を追加するフック
+ 
+ DOMの変更
+ APIとの通信
+ 非同期処理
+ console.log
+ 
+ このフックを利用すれば、コンポーネントのマウント後にその副作用が実行される。
+
+
+■カスタムフック
+　名前は必ずuseから始まる必要がある
+
+■フックのルール
+　コンポーネントの外でフックを呼び出してはいけない
+　
+　他のルール
+　https://ja.reactjs.org/docs/hooks-rules.html

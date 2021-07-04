@@ -1,0 +1,116 @@
+コンポーネント
+
+■コンポーネントの定義
+
+function Hello(){
+	return <h1>HelloReact</h1>
+}
+const Hello = () => <h1>HelloReact</h1>
+
+
+コンポーネント名の最初は必ず大文字にする必要があり、helloなどの名前は利用できない。
+
+■コンポーネントの利用
+
+function App()
+{
+	return (
+		<div>
+			<Hello />
+		</div>
+	)
+}
+
+
+■引数の設定(Props)
+
+  Propsは変更してはいけない
+
+const Hello = (props) => <h1>Hello, React {props.name}</h1>
+const Hello2 = ({name}) => <h1>Hello, React {name}</h1>
+const Hello3 = ({id,name}) => <h1>Hello, React {id} {name}</h1>
+
+// App コンポーネント
+function App() {
+	
+	const message = 'React';
+	
+	const data = {
+		id:'500',
+		name:'太郎'
+	}
+	
+	return (
+		<>
+		<div>
+			<Hello name="React" />
+			<Hello2 name={message} />
+			<Hello3 {...data} />
+		</div>
+		</>
+	);
+}
+
+■条件分岐
+・条件に応じたJSXを返す
+・&&演算子を利用する
+・三項演算子を利用する
+・即時関数を利用する
+
+
+
+■繰り返し描画
+・mapを埋め込む
+・mapの実行結果が格納された変数を埋め込む
+・mapの実行結果を返す関数を埋め込む
+
+
+▼mapを埋め込む
+const books=[
+	{id:1,title:'React.js&Next.js超入門'},
+	{id:2,title:'React開発現場の教科書'},
+	{id:3,title:'Reactビギナーズガイド'}
+];
+
+return(
+	<ul>
+		{
+			books.map(book=>(
+				//key属性は必ず指定する
+				<li key={book.id}>{book.title}</li>
+			))
+		}
+	</ul>
+);}
+
+▼mapの実行結果が格納された変数を埋め込む
+	const books=[
+		{id:1,title:'React.js&Next.js超入門'},
+		{id:2,title:'React開発現場の教科書'},
+		{id:3,title:'Reactビギナーズガイド'}
+	];
+	
+	const listItems = books.map(book => <li key={book.id}>{book.title}</li>);
+	return (
+		<>
+			<ul>{listItems}</ul>
+		</>
+	);
+	
+
+▼mapの実行結果を返す関数を埋め込む
+const books=[
+		{id:1,title:'React.js&Next.js超入門'},
+		{id:2,title:'React開発現場の教科書'},
+		{id:3,title:'Reactビギナーズガイド'}
+	];
+	
+	const listItems2 = library =>
+		 books.map(book => (
+		 	<li key={book.id}>{library} {book.title}</li>
+		 ));
+
+	return (
+		<ul>{listItems2('Vue.js')}</ul>
+	);
+	

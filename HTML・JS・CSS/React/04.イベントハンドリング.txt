@@ -1,0 +1,18 @@
+イベントハンドリング
+
+
+function App(){
+	function handleClick(){
+		console.log('clicked');
+	}
+	
+	//属性はキャメルケース（onClick）で指定し、
+	//イベントハンドラは関数（{handleClick}）を指定する必要がある。
+	return <button onClick={handleClick}>click</button>;
+	
+	//以下の場合、属性がキャメルケースではないため動作しない。
+	//return<button onclick={handleClick}>click</button>
+	
+	//以下の場合、イベントハンドラが文字列のため動作しない。
+	//return<button onClick="handleClick">click</button>
+}
