@@ -1,0 +1,5 @@
+■Redux
+　大規模state管理
+
+■react-router-dom
+　ルーティング

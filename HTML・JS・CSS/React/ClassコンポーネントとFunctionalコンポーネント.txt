@@ -1,0 +1,37 @@
+ReactのコンポーネントにはClassコンポーネントとFunctionalコンポーネントの2種の記法がある。
+かつてstateはClassコンポーネントのみ使えたが、今は違っている。
+そのため、現在Classコンポーネントを使う必要性は低くなっている。
+
+
+//Classコンポーネント-----------------------------
+import React from 'react';
+class Welcome extends React.Component {
+	this.state = { show:false}; // stateの記法
+	render() {
+		return(
+			<h1>こんにちは</h1>
+		);
+	}
+}
+
+export default Welcome;
+//-------------------------------------------------------
+
+// Functionalコンポーネント バリエーション１------------
+const Title = () => {
+	return (
+		<h1>ワールドウェザー</h1>
+	);
+};
+export default Title;
+//-------------------------------------------------------
+
+
+// Functionalコンポーネント バリエーション２------------
+function Title (){
+	 return (
+	 	 <h1>ワールドウェザー</h1>
+	 );
+};
+export default Title;
+//-------------------------------------------------------
