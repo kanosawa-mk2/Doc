@@ -1,0 +1,3 @@
+
+１．サンプルcreate-react-appを作成する
+npx create-react-app react-typescript-weather-apptemplate typescript
