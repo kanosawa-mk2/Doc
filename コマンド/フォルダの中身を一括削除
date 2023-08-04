@@ -1,0 +1,22 @@
+echo off
+
+cd /d %~dp0
+
+set ROOT_DIR=E:\public
+
+set DEL_DIR=%ROOT_DIR%¥del
+
+goto main
+
+rem ----- フォルダーの中身を一括削除 -----
+:delte
+echo %PARAMETER%
+pushd "%PARAMETER%"
+del /q *.*
+for /d %%f in ( * ) do rd /s /q "%%f"
+exit /b
+
+rem ----- メイン処理 -----
+:main
+set PARAMETER=%DEL_DIR%
+call :delte
