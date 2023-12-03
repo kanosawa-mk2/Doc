@@ -1,0 +1,39 @@
+SQLServer
+SSMSはインストール済みの状態。
+
+1.SSMSの管理者でログイン
+
+2.認証モードの設定
+　TOP階層を右クリック>プロパティ
+　　セキュリティ＞SQL Server認証とWindowsに認証モード
+　OK
+
+
+3.新しいデータベースの作成
+　データベースを右クリック→新しいデータベース
+　データベース名を入力してOK
+
+4.設定変更
+  
+  ALTER DATABASE TestDb SET READ_COMMITTED_SNAPSHOT ON
+  
+5.ログインの作成
+　セキュリティ→ログインを右クリック→新しいログイン
+　SQLServer認証を選択
+　　ユーザ名/パスワードは任意
+　
+　既定のデータベース：新しいデータベース
+　
+　ユーザマッピング
+　　新しいデータベースを選択
+　　　既定のスキーマ：dbo
+　　ロール
+　　　db_owner
+
+6.TCPIPポート設定
+　SQLServer 構成マネージャを起動
+　
+　MSSQLSERVERのプロトコル
+　　TCP/IPを有効に変更
+　
+7.SQL Server再起動
