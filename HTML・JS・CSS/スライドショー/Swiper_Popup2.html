@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Image Slider</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <style>
+        .swiper {
+            width: 80%;
+            height: 400px;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+     .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none; /* 初期は非表示 */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .popup-content {
+        max-width: 90%;
+        max-height: 90%;
+        position: relative;
+    }
+
+    .popup-content img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 10px;
+    }
+
+    .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <!-- 画像を動的に追加 -->
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="popup-overlay">
+    <div class="popup-content">
+        <span class="popup-close">&times;</span>
+        <img id="popup-img" src="" alt="Popup Image">
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <!-- Lightbox2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            try {
+                const response = await fetch("/yourApp/images");
+                const images = await response.json();
+                const swiperWrapper = document.querySelector('.swiper-wrapper');
+
+                // 以下のタグをdivとimgの間に追加 <a href="image1.jpg" data-lightbox="gallery">
+
+                images.forEach(url => {
+                    const slide = document.createElement("div");
+                    slide.classList.add("swiper-slide");
+                    slide.innerHTML = `<img src="${url}" alt="Dynamic Image">`;
+                    swiperWrapper.appendChild(slide);
+                });
+
+                // Swiperの初期化
+                new Swiper('.swiper', {
+                    loop: true,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    autoplay: {
+                        delay: 3000,
+                    },
+                });
+                
+                
+                 // ポップアップの要素
+        let $popup = $(".popup-overlay");
+        let $popupImg = $("#popup-img");
+
+        // 画像クリック時にポップアップ表示
+        $(".swiper-slide img").on("click", function () {
+            $popupImg.attr("src", $(this).attr("src"));
+            $popup.fadeIn(300);
+        });
+
+        // ポップアップを閉じる
+        $(".popup-close, .popup-overlay").on("click", function () {
+            $popup.fadeOut(300);
+        });
+
+        // ポップアップ内部の画像をクリックしても閉じないようにする
+        $(".popup-content").on("click", function (e) {
+            e.stopPropagation();
+        });
+
+            } catch (error) {
+                console.error("画像の取得に失敗しました", error);
+            }
+        });
+    </script>
+
+</body>
+</html>
