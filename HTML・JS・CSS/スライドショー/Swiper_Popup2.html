@@ -100,9 +100,9 @@
                 });
                 
                 
-        // ポップアップのHTMLを動的に作成
+        // ポップアップのHTMLを動的に作成（最初はdisplay: none;）
         let popupHtml = `
-            <div class="popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+            <div class="popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); align-items: center; justify-content: center; z-index: 1000;">
                 <div class="popup-content" style="position: relative; max-width: 90%; max-height: 90%;">
                     <span class="popup-close" style="position: absolute; top: 10px; right: 15px; font-size: 24px; color: white; cursor: pointer;">&times;</span>
                     <img id="popup-img" src="" style="max-width: 100%; max-height: 100%; border-radius: 10px; display: block; margin: auto;">
@@ -114,15 +114,17 @@
         let $popup = $(".popup-overlay");
         let $popupImg = $("#popup-img");
 
-        // 画像クリック時にポップアップ表示（中央表示）
+        // 画像クリック時にポップアップ表示
         $(".swiper-slide img").on("click", function () {
             $popupImg.attr("src", $(this).attr("src"));
-            $popup.fadeIn(300); // 🔥 アニメーション付きで表示
+            $popup.css("display", "flex").hide().fadeIn(300); // 🔥 display: flex; を設定してからフェードイン
         });
 
         // ポップアップを閉じる
         $(".popup-close, .popup-overlay").on("click", function () {
-            $popup.fadeOut(300); // 🔥 アニメーション付きで閉じる
+            $popup.fadeOut(300, function () {
+                $popup.css("display", "none"); // フェードアウト後に display: none; を設定
+            });
         });
 
         // ポップアップ内部の画像をクリックしても閉じないようにする
