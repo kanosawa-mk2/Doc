@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Image Slider</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <style>
         .swiper {
             width: 80%;
@@ -61,11 +60,6 @@
         <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
     </div>
-    <div class="popup-overlay">
-    <div class="popup-content">
-        <span class="popup-close">&times;</span>
-        <img id="popup-img" src="" alt="Popup Image">
-    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -73,8 +67,6 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-    <!-- Lightbox2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", async function() {
             try {
@@ -108,29 +100,34 @@
                 });
                 
                 
-                 // ポップアップの要素
+        // ポップアップのHTMLを動的に作成
+        let popupHtml = `
+            <div class="popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); align-items: center; justify-content: center;">
+                <div class="popup-content" style="max-width: 90%; max-height: 90%; position: relative;">
+                    <span class="popup-close" style="position: absolute; top: 10px; right: 15px; font-size: 24px; color: white; cursor: pointer;">&times;</span>
+                    <img id="popup-img" src="" style="max-width: 100%; max-height: 100%; border-radius: 10px;">
+                </div>
+            </div>
+        `;
+        $("body").append(popupHtml); // body に追加
+
         let $popup = $(".popup-overlay");
         let $popupImg = $("#popup-img");
 
         // 画像クリック時にポップアップ表示
         $(".swiper-slide img").on("click", function () {
             $popupImg.attr("src", $(this).attr("src"));
-            $popup.fadeIn(300);
+            $popup.fadeIn(300); // アニメーション付きで表示
         });
 
         // ポップアップを閉じる
         $(".popup-close, .popup-overlay").on("click", function () {
-            $popup.fadeOut(300);
+            $popup.fadeOut(300); // アニメーション付きで閉じる
         });
 
         // ポップアップ内部の画像をクリックしても閉じないようにする
         $(".popup-content").on("click", function (e) {
             e.stopPropagation();
-        });
-
-            } catch (error) {
-                console.error("画像の取得に失敗しました", error);
-            }
         });
     </script>
 
