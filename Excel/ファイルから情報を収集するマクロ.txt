@@ -1,0 +1,92 @@
+Sub CollectDataFromExcelFiles()
+    ' --- 定数定義 ---
+    Const START_ROW As Long = 6  ' データ取得開始行
+    Const KEY_CELL As String = "A4"  ' キー値取得セル
+    Const DATA_RANGE As String = "A:G"  ' データ範囲（最終行取得用）
+    Const SHEET_INDEX As Integer = 1  ' 処理対象シート（1枚目）
+    
+    Dim wsDest As Worksheet
+    Dim wsSrc As Worksheet
+    Dim wbSrc As Workbook
+    Dim rng As Range
+    Dim folderPath As String
+    Dim fileName As String
+    Dim lastRow As Long
+    Dim destRow As Long
+    Dim keyValue As String
+    Dim dataRows As Long
+    
+    ' 統合先のシートを設定（マクロを実行するブックの1枚目のシート）
+    Set wsDest = ThisWorkbook.Sheets(1)
+
+    ' ヘッダー行の確認（初回のみ追加）
+    If wsDest.Cells(1, 1).Value = "" Then
+        Dim headers As Variant
+        headers = Array("ファイル名", "キー(A4)", "A列", "B列", "C列", "D列", "E列", "F列", "G列")
+        wsDest.Range("A1:I1").Value = headers
+    End If
+    
+    ' フォルダ選択ダイアログを表示
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .Title = "フォルダを選択してください"
+        If .Show = -1 Then
+            folderPath = .SelectedItems(1) & "\"
+        Else
+            Exit Sub ' キャンセル時に終了
+        End If
+    End With
+    
+    ' フォルダ内のExcelファイルを取得
+    fileName = Dir(folderPath & "*.xlsx")
+    destRow = wsDest.Cells(Rows.Count, 1).End(xlUp).Row + 1 ' 既存データの最終行を取得
+    
+    ' 画面更新停止（処理速度向上）
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    
+    ' 各Excelファイルを処理
+    Do While fileName <> ""
+        ' Excelブックを開く（読み取り専用）
+        Set wbSrc = Workbooks.Open(folderPath & fileName, ReadOnly:=True)
+        Set wsSrc = wbSrc.Sheets(SHEET_INDEX) ' 1枚目のシートを対象
+        
+        ' キー(A4)の取得
+        keyValue = wsSrc.Range(KEY_CELL).Value
+        
+        ' A:G の最終行を取得（6行目以降）
+        lastRow = wsSrc.Cells(Rows.Count, 1).End(xlUp).Row
+        If lastRow < START_ROW Then
+            ' データがなければスキップ
+            wbSrc.Close False
+            fileName = Dir() ' 次のファイルへ
+            GoTo NextFile
+        End If
+        
+        ' データ範囲を取得
+        Set rng = wsSrc.Range("A" & START_ROW & ":G" & lastRow)
+        dataRows = rng.Rows.Count ' データの行数
+        
+        ' データを統合シートへ転記
+        wsDest.Cells(destRow, 3).Resize(dataRows, 7).Value = rng.Value
+        
+        ' ファイル名とキーをデータの行数分埋める
+        wsDest.Cells(destRow, 1).Resize(dataRows, 1).Value = fileName
+        wsDest.Cells(destRow, 2).Resize(dataRows, 1).Value = keyValue
+        
+        ' 次の書き込み開始行を更新
+        destRow = wsDest.Cells(Rows.Count, 1).End(xlUp).Row + 1
+
+        ' ブックを閉じる
+        wbSrc.Close False
+        
+NextFile:
+        fileName = Dir() ' 次のファイルへ
+    Loop
+    
+    ' クリップボードの選択を解除
+    Application.CutCopyMode = False
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    
+    MsgBox "データの統合が完了しました。", vbInformation
+End Sub
