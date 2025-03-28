@@ -33,42 +33,39 @@ Sub ImportCSVFiles()
     ' フォルダ内のCSVファイルを検索
     fileName = Dir(folderPath & "*.csv")
     
-    ' CSVファイルを1つずつ処理
+' CSVファイルを1つずつ処理
     Do While fileName <> ""
         filePath = folderPath & fileName
-        
-        ' 新しいシートを作成
+
+        ' 🔹 CSVファイルをUTF-8で読み込む
+        textData = ReadUTF8File(filePath)
+
+        ' 🔹 改行ごとに分割（1行ごとの配列）
+        textLines = Split(textData, vbCrLf)
+
+        ' ✅ 新しいシートを作成（ファイル名をシート名に設定）
         Set ws = ThisWorkbook.Sheets.Add
-        ws.Name = Left(fileName, Len(fileName) - 4) ' 拡張子を除く
-        
-        ' ファイルを開く（UTF-8対応）
-        Dim fileNum As Integer
-        fileNum = FreeFile
-        Open filePath For Input As #fileNum
-        
+        ws.Name = Left(fileName, Len(fileName) - 4) ' 拡張子を除去
+
         rowNum = 1
-        
-        ' ファイルの内容を1行ずつ処理
-        Do While Not EOF(fileNum)
-            Line Input #fileNum, textLine ' 1行読み込み
-            
-            ' ダブルクォーテーション内のカンマを考慮したパース
-            cellValues = SplitCSV(textLine)
-            
-            colNum = 1
-            For i = LBound(cellValues) To UBound(cellValues)
-                ' **Excelの自動変換を防ぐ**
-                ws.Cells(rowNum, colNum).Value = "'" & cellValues(i)
-                colNum = colNum + 1
-            Next i
-            
-            rowNum = rowNum + 1
-        Loop
-        
-        ' ファイルを閉じる
-        Close #fileNum
-        
-        ' 次のファイルへ
+
+        ' 📌 CSVデータを行ごとに処理
+        For i = LBound(textLines) To UBound(textLines)
+            If Trim(textLines(i)) <> "" Then ' 空行はスキップ
+                cellValues = SplitCSV(textLines(i)) ' カンマ処理（ダブルクォーテーション対応）
+                
+                colNum = 1
+                For j = LBound(cellValues) To UBound(cellValues)
+                    ' ✅ Excelの自動変換を防ぐために、すべて文字列として扱う
+                    ws.Cells(rowNum, colNum).Value = "'" & cellValues(j)
+                    colNum = colNum + 1
+                Next j
+                
+                rowNum = rowNum + 1
+            End If
+        Next i
+
+        ' 次のCSVファイルへ
         fileName = Dir()
     Loop
     
@@ -79,34 +76,53 @@ Sub ImportCSVFiles()
     MsgBox "CSVの読み込みが完了しました！", vbInformation
 End Sub
 
+Function ReadUTF8File(filePath As String) As String
+    Dim stream As Object
+    Dim textData As String
+
+    ' 🔹 ADODB.Stream を使ってUTF-8のデータを正しく読み込む
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 2 ' テキストストリーム
+    stream.Charset = "utf-8"
+    stream.Open
+    stream.LoadFromFile filePath
+
+    ' ファイルの内容を取得
+    textData = stream.ReadText
+    stream.Close
+    Set stream = Nothing
+
+    ReadUTF8File = textData
+End Function
+
 Function SplitCSV(line As String) As Variant
     Dim result() As String
     Dim tempStr As String
     Dim inQuotes As Boolean
     Dim i As Integer
     Dim char As String
-    
+
     ' 初期化
     ReDim result(0)
     tempStr = ""
     inQuotes = False
-    
-    ' 文字ごとに解析
+
+    ' 1文字ずつ解析
     For i = 1 To Len(line)
         char = Mid(line, i, 1)
-        
-        ' ダブルクォーテーションの処理
+
+        ' 🔹 ダブルクォーテーションの処理
         If char = """" Then
             If inQuotes And i < Len(line) And Mid(line, i + 1, 1) = """" Then
                 ' 連続するダブルクォーテーションはエスケープ処理（"" → "）
                 tempStr = tempStr & """"
-                i = i + 1 ' 次の文字へスキップ
+                i = i + 1
             Else
                 ' ダブルクォーテーションの開閉を切り替え
                 inQuotes = Not inQuotes
             End If
         ElseIf char = "," And Not inQuotes Then
-            ' カンマが区切り文字として機能するのは、ダブルクォーテーション外のみ
+            ' 🔹 カンマが区切り文字として機能するのは、ダブルクォーテーション外のみ
             result(UBound(result)) = tempStr
             tempStr = ""
             ReDim Preserve result(UBound(result) + 1)
@@ -115,10 +131,9 @@ Function SplitCSV(line As String) As Variant
             tempStr = tempStr & char
         End If
     Next i
-    
+
     ' 最後の値を格納
     result(UBound(result)) = tempStr
-    
+
     SplitCSV = result
 End Function
-
