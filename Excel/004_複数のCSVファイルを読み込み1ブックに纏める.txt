@@ -1,16 +1,13 @@
 Sub ImportCSVFiles()
     Dim ws As Worksheet
-    Dim fso As Object
     Dim folderPath As String
     Dim fileName As String
     Dim filePath As String
-    Dim textLine As String
+    Dim textData As String
+    Dim textLines As Variant
     Dim rowNum As Long, colNum As Long
     Dim cellValues As Variant
-    Dim tempStr As String
-    Dim cellValue As String
-    Dim inQuotes As Boolean
-    Dim i As Integer
+    Dim i As Integer, j As Integer
     
 
         ' ユーザーにフォルダ選択ダイアログを表示
