@@ -1,4 +1,4 @@
-Sub SplitRowsByNewline()
+Sub SplitRowsByNewline_Updated()
     Dim ws As Worksheet
     Dim newWs As Worksheet
     Dim lastRow As Long, lastCol As Long
@@ -7,28 +7,24 @@ Sub SplitRowsByNewline()
     Dim maxLines As Integer
     Dim cellValues As Variant
     Dim i As Integer
+    Dim cellValue As String
     
     ' 対象のシート（アクティブシート）
     Set ws = ActiveSheet
     
-    ' 元データの最終行・最終列を取得
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
-    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    ' 元データの最終行・最終列を取得（空セルがあっても対応）
+    lastRow = ws.Cells.Find("*", SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row
+    lastCol = ws.Cells.Find("*", SearchOrder:=xlByColumns, SearchDirection:=xlPrevious).Column
     
     ' 出力用の新しいシートを作成
     Set newWs = ThisWorkbook.Sheets.Add
     newWs.Name = "分割データ"
     
-    ' ヘッダーをコピー
-    For col = 1 To lastCol
-        newWs.Cells(1, col).Value = ws.Cells(1, col).Value
-    Next col
-    
-    ' 新しい行の出力開始位置
-    destRow = 2
+    ' 新しい行の出力開始位置（ヘッダーなし）
+    destRow = 1
     
     ' データ処理開始
-    For srcRow = 2 To lastRow
+    For srcRow = 1 To lastRow
         maxLines = 1 ' 最大改行数の初期化
         
         ' 各列のデータを取得し、最大改行数を確認
@@ -46,14 +42,17 @@ Sub SplitRowsByNewline()
                 
                 ' 該当の行がある場合はその値を、ない場合は直前の値を使用
                 If i <= UBound(cellValues) Then
-                    newWs.Cells(destRow, col).Value = cellValues(i)
+                    cellValue = cellValues(i)
                 Else
-                    newWs.Cells(destRow, col).Value = newWs.Cells(destRow - 1, col).Value
+                    cellValue = newWs.Cells(destRow - 1, col).Value
                 End If
+                
+                ' **自動変換を防ぐために文字列として格納**
+                newWs.Cells(destRow, col).Value = "'" & cellValue
             Next col
             destRow = destRow + 1 ' 次の行へ
         Next i
     Next srcRow
     
-    MsgBox "データの分割が完了しました！", vbInformation
+    MsgBox "データの分割が完了しました！（自動変換防止済み）", vbInformation
 End Sub

@@ -1,12 +1,15 @@
-Sub ImportCSVFilesToSheets()
+Sub ImportCSVFiles_UTF8()
     Dim ws As Worksheet
     Dim folderPath As String
     Dim fileName As String
     Dim rowIndex As Long
     Dim colIndex As Long
     Dim dataArray As Variant
-    Dim csvLine As String
-    Dim fileNo As Integer
+    Dim csvData As String
+    Dim lines As Variant
+    Dim cols As Variant
+    Dim i As Integer
+    Dim j As Integer
     
     ' ユーザーにフォルダ選択ダイアログを表示
     With Application.FileDialog(msoFileDialogFolderPicker)
@@ -31,33 +34,36 @@ Sub ImportCSVFilesToSheets()
         Set ws = ThisWorkbook.Sheets.Add
         ws.Name = Left(fileName, Len(fileName) - 4) ' .csvを除いた名前をシート名にする
         
-        ' CSVファイルを開く（データを配列として取得）
-        fileNo = FreeFile
-        Open folderPath & fileName For Input As #fileNo
+        ' CSVファイルをUTF-8で読み込む
+        csvData = ReadCSV_UTF8(folderPath & fileName)
         
+        ' 行ごとに分割
+        lines = Split(csvData, vbCrLf)
+        
+        ' 各行を処理
         rowIndex = 1
-        Do Until EOF(fileNo)
-            Line Input #fileNo, csvLine ' 1行ずつ読み込む
-            dataArray = Split(csvLine, ",") ' カンマ区切りで分割
-            
-            ' 各データを処理（ダブルクォーテーションを削除しつつ、文字列として保存）
-            For colIndex = LBound(dataArray) To UBound(dataArray)
-                Dim cellValue As String
-                cellValue = Trim(dataArray(colIndex))
+        For i = LBound(lines) To UBound(lines)
+            If Trim(lines(i)) <> "" Then ' 空行を無視
+                ' カンマ区切りで分割
+                cols = Split(lines(i), ",")
                 
-                ' ダブルクォーテーションを削除
-                If Left(cellValue, 1) = """" And Right(cellValue, 1) = """" Then
-                    cellValue = Mid(cellValue, 2, Len(cellValue) - 2)
-                End If
+                ' 各データを処理（ダブルクォーテーションを削除しつつ、文字列として保存）
+                For j = LBound(cols) To UBound(cols)
+                    Dim cellValue As String
+                    cellValue = Trim(cols(j))
+                    
+                    ' ダブルクォーテーションを削除
+                    If Left(cellValue, 1) = """" And Right(cellValue, 1) = """" Then
+                        cellValue = Mid(cellValue, 2, Len(cellValue) - 2)
+                    End If
+                    
+                    ' 自動変換を防ぐために文字列として保存
+                    ws.Cells(rowIndex, j + 1).Value = "'" & cellValue
+                Next j
                 
-                ' 自動変換を防ぐために文字列として保存
-                ws.Cells(rowIndex, colIndex + 1).Value = "'" & cellValue
-            Next colIndex
-            
-            rowIndex = rowIndex + 1
-        Loop
-        
-        Close #fileNo ' ファイルを閉じる
+                rowIndex = rowIndex + 1
+            End If
+        Next i
         
         ' 次のCSVファイルへ
         fileName = Dir()
@@ -67,5 +73,23 @@ Sub ImportCSVFilesToSheets()
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
     
-    MsgBox "CSVデータの取り込みが完了しました。", vbInformation
+    MsgBox "CSVデータの取り込みが完了しました（UTF-8対応済み）。", vbInformation
 End Sub
+
+' *** UTF-8でCSVファイルを読み込む関数 ***
+Function ReadCSV_UTF8(filePath As String) As String
+    Dim objStream As Object
+    Set objStream = CreateObject("ADODB.Stream")
+    
+    ' UTF-8でファイルを開く
+    With objStream
+        .Type = 2 ' テキストデータとして扱う
+        .Charset = "UTF-8" ' UTF-8指定
+        .Open
+        .LoadFromFile filePath
+        ReadCSV_UTF8 = .ReadText ' テキストとして読み込む
+        .Close
+    End With
+    
+    Set objStream = Nothing
+End Function
