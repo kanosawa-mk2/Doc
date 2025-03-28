@@ -1,0 +1,71 @@
+Sub ImportCSVFilesToSheets()
+    Dim ws As Worksheet
+    Dim folderPath As String
+    Dim fileName As String
+    Dim rowIndex As Long
+    Dim colIndex As Long
+    Dim dataArray As Variant
+    Dim csvLine As String
+    Dim fileNo As Integer
+    
+    ' ユーザーにフォルダ選択ダイアログを表示
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .Title = "CSVファイルが格納されたフォルダを選択してください"
+        If .Show = -1 Then
+            folderPath = .SelectedItems(1) & "\"
+        Else
+            Exit Sub ' キャンセルされた場合は終了
+        End If
+    End With
+    
+    ' 画面更新を停止（処理速度向上）
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    
+    ' フォルダ内のCSVファイルを取得
+    fileName = Dir(folderPath & "*.csv")
+    
+    ' 各CSVファイルを処理
+    Do While fileName <> ""
+        ' 新しいシートを追加（CSVのファイル名をシート名に設定）
+        Set ws = ThisWorkbook.Sheets.Add
+        ws.Name = Left(fileName, Len(fileName) - 4) ' .csvを除いた名前をシート名にする
+        
+        ' CSVファイルを開く（データを配列として取得）
+        fileNo = FreeFile
+        Open folderPath & fileName For Input As #fileNo
+        
+        rowIndex = 1
+        Do Until EOF(fileNo)
+            Line Input #fileNo, csvLine ' 1行ずつ読み込む
+            dataArray = Split(csvLine, ",") ' カンマ区切りで分割
+            
+            ' 各データを処理（ダブルクォーテーションを削除しつつ、文字列として保存）
+            For colIndex = LBound(dataArray) To UBound(dataArray)
+                Dim cellValue As String
+                cellValue = Trim(dataArray(colIndex))
+                
+                ' ダブルクォーテーションを削除
+                If Left(cellValue, 1) = """" And Right(cellValue, 1) = """" Then
+                    cellValue = Mid(cellValue, 2, Len(cellValue) - 2)
+                End If
+                
+                ' 自動変換を防ぐために文字列として保存
+                ws.Cells(rowIndex, colIndex + 1).Value = "'" & cellValue
+            Next colIndex
+            
+            rowIndex = rowIndex + 1
+        Loop
+        
+        Close #fileNo ' ファイルを閉じる
+        
+        ' 次のCSVファイルへ
+        fileName = Dir()
+    Loop
+    
+    ' 画面更新を再開
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    
+    MsgBox "CSVデータの取り込みが完了しました。", vbInformation
+End Sub
