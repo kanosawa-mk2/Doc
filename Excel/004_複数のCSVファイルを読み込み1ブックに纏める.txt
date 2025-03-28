@@ -12,8 +12,20 @@ Sub ImportCSVFiles()
     Dim inQuotes As Boolean
     Dim i As Integer
     
-    ' CSVフォルダのパスを指定（適宜変更）
-    folderPath = "C:\CSVフォルダ\"
+
+        ' ユーザーにフォルダ選択ダイアログを表示
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .Title = "CSVファイルが格納されたフォルダを選択してください"
+        If .Show = -1 Then
+            folderPath = .SelectedItems(1) & "\"
+        Else
+            Exit Sub ' キャンセルされた場合は終了
+        End If
+    End With
+    
+        ' 画面更新を停止（処理速度向上）
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
     
     ' FileSystemObject を作成
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -60,5 +72,53 @@ Sub ImportCSVFiles()
         fileName = Dir()
     Loop
     
+        ' 画面更新を再開
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    
     MsgBox "CSVの読み込みが完了しました！", vbInformation
 End Sub
+
+Function SplitCSV(line As String) As Variant
+    Dim result() As String
+    Dim tempStr As String
+    Dim inQuotes As Boolean
+    Dim i As Integer
+    Dim char As String
+    
+    ' 初期化
+    ReDim result(0)
+    tempStr = ""
+    inQuotes = False
+    
+    ' 文字ごとに解析
+    For i = 1 To Len(line)
+        char = Mid(line, i, 1)
+        
+        ' ダブルクォーテーションの処理
+        If char = """" Then
+            If inQuotes And i < Len(line) And Mid(line, i + 1, 1) = """" Then
+                ' 連続するダブルクォーテーションはエスケープ処理（"" → "）
+                tempStr = tempStr & """"
+                i = i + 1 ' 次の文字へスキップ
+            Else
+                ' ダブルクォーテーションの開閉を切り替え
+                inQuotes = Not inQuotes
+            End If
+        ElseIf char = "," And Not inQuotes Then
+            ' カンマが区切り文字として機能するのは、ダブルクォーテーション外のみ
+            result(UBound(result)) = tempStr
+            tempStr = ""
+            ReDim Preserve result(UBound(result) + 1)
+        Else
+            ' 通常の文字を追加
+            tempStr = tempStr & char
+        End If
+    Next i
+    
+    ' 最後の値を格納
+    result(UBound(result)) = tempStr
+    
+    SplitCSV = result
+End Function
+
