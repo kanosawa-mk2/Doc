@@ -1,95 +1,64 @@
-Sub ImportCSVFiles_UTF8()
+Sub ImportCSVFiles()
     Dim ws As Worksheet
+    Dim fso As Object
     Dim folderPath As String
     Dim fileName As String
-    Dim rowIndex As Long
-    Dim colIndex As Long
-    Dim dataArray As Variant
-    Dim csvData As String
-    Dim lines As Variant
-    Dim cols As Variant
+    Dim filePath As String
+    Dim textLine As String
+    Dim rowNum As Long, colNum As Long
+    Dim cellValues As Variant
+    Dim tempStr As String
+    Dim cellValue As String
+    Dim inQuotes As Boolean
     Dim i As Integer
-    Dim j As Integer
     
-    ' ユーザーにフォルダ選択ダイアログを表示
-    With Application.FileDialog(msoFileDialogFolderPicker)
-        .Title = "CSVファイルが格納されたフォルダを選択してください"
-        If .Show = -1 Then
-            folderPath = .SelectedItems(1) & "\"
-        Else
-            Exit Sub ' キャンセルされた場合は終了
-        End If
-    End With
+    ' CSVフォルダのパスを指定（適宜変更）
+    folderPath = "C:\CSVフォルダ\"
     
-    ' 画面更新を停止（処理速度向上）
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
+    ' FileSystemObject を作成
+    Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' フォルダ内のCSVファイルを取得
+    ' フォルダ内のCSVファイルを検索
     fileName = Dir(folderPath & "*.csv")
     
-    ' 各CSVファイルを処理
+    ' CSVファイルを1つずつ処理
     Do While fileName <> ""
-        ' 新しいシートを追加（CSVのファイル名をシート名に設定）
+        filePath = folderPath & fileName
+        
+        ' 新しいシートを作成
         Set ws = ThisWorkbook.Sheets.Add
-        ws.Name = Left(fileName, Len(fileName) - 4) ' .csvを除いた名前をシート名にする
+        ws.Name = Left(fileName, Len(fileName) - 4) ' 拡張子を除く
         
-        ' CSVファイルをUTF-8で読み込む
-        csvData = ReadCSV_UTF8(folderPath & fileName)
+        ' ファイルを開く（UTF-8対応）
+        Dim fileNum As Integer
+        fileNum = FreeFile
+        Open filePath For Input As #fileNum
         
-        ' 行ごとに分割
-        lines = Split(csvData, vbCrLf)
+        rowNum = 1
         
-        ' 各行を処理
-        rowIndex = 1
-        For i = LBound(lines) To UBound(lines)
-            If Trim(lines(i)) <> "" Then ' 空行を無視
-                ' カンマ区切りで分割
-                cols = Split(lines(i), ",")
-                
-                ' 各データを処理（ダブルクォーテーションを削除しつつ、文字列として保存）
-                For j = LBound(cols) To UBound(cols)
-                    Dim cellValue As String
-                    cellValue = Trim(cols(j))
-                    
-                    ' ダブルクォーテーションを削除
-                    If Left(cellValue, 1) = """" And Right(cellValue, 1) = """" Then
-                        cellValue = Mid(cellValue, 2, Len(cellValue) - 2)
-                    End If
-                    
-                    ' 自動変換を防ぐために文字列として保存
-                    ws.Cells(rowIndex, j + 1).Value = "'" & cellValue
-                Next j
-                
-                rowIndex = rowIndex + 1
-            End If
-        Next i
+        ' ファイルの内容を1行ずつ処理
+        Do While Not EOF(fileNum)
+            Line Input #fileNum, textLine ' 1行読み込み
+            
+            ' ダブルクォーテーション内のカンマを考慮したパース
+            cellValues = SplitCSV(textLine)
+            
+            colNum = 1
+            For i = LBound(cellValues) To UBound(cellValues)
+                ' **Excelの自動変換を防ぐ**
+                ws.Cells(rowNum, colNum).Value = "'" & cellValues(i)
+                colNum = colNum + 1
+            Next i
+            
+            rowNum = rowNum + 1
+        Loop
         
-        ' 次のCSVファイルへ
+        ' ファイルを閉じる
+        Close #fileNum
+        
+        ' 次のファイルへ
         fileName = Dir()
     Loop
     
-    ' 画面更新を再開
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    
-    MsgBox "CSVデータの取り込みが完了しました（UTF-8対応済み）。", vbInformation
+    MsgBox "CSVの読み込みが完了しました！", vbInformation
 End Sub
-
-' *** UTF-8でCSVファイルを読み込む関数 ***
-Function ReadCSV_UTF8(filePath As String) As String
-    Dim objStream As Object
-    Set objStream = CreateObject("ADODB.Stream")
-    
-    ' UTF-8でファイルを開く
-    With objStream
-        .Type = 2 ' テキストデータとして扱う
-        .Charset = "UTF-8" ' UTF-8指定
-        .Open
-        .LoadFromFile filePath
-        ReadCSV_UTF8 = .ReadText ' テキストとして読み込む
-        .Close
-    End With
-    
-    Set objStream = Nothing
-End Function
