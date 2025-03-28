@@ -27,10 +27,11 @@ Sub ImportCSVFiles()
     ' FileSystemObject を作成
     Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' フォルダ内のCSVファイルを検索
-    fileName = Dir(folderPath & "*.csv")
     
-' CSVファイルを1つずつ処理
+    ' 📌 フォルダ内のCSVファイルを検索
+    fileName = Dir(folderPath & "*.csv")
+
+    ' CSVファイルを1つずつ処理
     Do While fileName <> ""
         filePath = folderPath & fileName
 
@@ -49,7 +50,7 @@ Sub ImportCSVFiles()
         ' 📌 CSVデータを行ごとに処理
         For i = LBound(textLines) To UBound(textLines)
             If Trim(textLines(i)) <> "" Then ' 空行はスキップ
-                cellValues = SplitCSV(textLines(i)) ' カンマ処理（ダブルクォーテーション対応）
+                cellValues = SplitCSVWithNewline(textLines(i)) ' カンマ処理（ダブルクォーテーション対応）
                 
                 colNum = 1
                 For j = LBound(cellValues) To UBound(cellValues)
@@ -92,7 +93,7 @@ Function ReadUTF8File(filePath As String) As String
     ReadUTF8File = textData
 End Function
 
-Function SplitCSV(line As String) As Variant
+Function SplitCSVWithNewline(line As String) As Variant
     Dim result() As String
     Dim tempStr As String
     Dim inQuotes As Boolean
@@ -132,5 +133,5 @@ Function SplitCSV(line As String) As Variant
     ' 最後の値を格納
     result(UBound(result)) = tempStr
 
-    SplitCSV = result
+    SplitCSVWithNewline = result
 End Function
