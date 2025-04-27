@@ -1,0 +1,48 @@
+Linuxコマンド集
+
+■管理者権限
+#rootユーザに切替 sudo su -
+
+■サービス
+サービス起動              sudo systemctl start tomcat.service
+        停止              sudo systemctl stop tomcat.service
+        再起動            sudo systemctl restart tomcat.service
+        ステータス確認    sudo systemctl status tomcat.service
+        起動中か確認      sudo systemctl is-active tomcat.service
+
+
+サービス名からtomcatと名前のついているものを確認 systemctl list-unit-files | grep tomcat
+
+
+■ファイル操作
+ファイルの作成・編集                  vi <file>
+空のファイルを作成                    touch <file>
+ディレクトリ作成                      mkdir <file>
+ファイル・ディレクトリの削除（再帰)   rm -r <file>
+確認なしで削除                        rm -rf <file>
+ファイルコピー                        cp -r -p <コピー元> <コピー先>
+
+ファイルの中身を表示                  cat <file>
+ファイルの末尾100行を表示             tail -n <file>
+権限・更新日時を確認                  ls -la --time-style="+%Y-%m-%d %H:%M:%S"
+
+■権限設定
+ファイルやディレクトリの権限を変更(再帰)   chmod -R 770 <file>
+ファイルやディレクトリの所有権を変更(再帰) chown -R ec2-user:ec2-user <file>
+
+■viコマンド
+挿入モード       i
+コマンドモード   Esc
+ファイル保存     :w
+保存して終了     :wq
+保存しないで終了 :q
+編集破棄して終了 :q!
+前の操作を取消す u
+行削除           dd
+行のコピー       yy
+複数行のコピー   y5j
+テキストの貼付け p
+行挿入           o
+
+■ZIP
+ファイルをzip化 zip -r <zip名> <file>
