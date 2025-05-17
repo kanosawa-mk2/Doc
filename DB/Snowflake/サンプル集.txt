@@ -1,0 +1,41 @@
+■更新日時の昇順で最初の1件目 を取得するSQL
+SELECT *
+FROM USER
+ORDER BY 更新日時 ASC
+LIMIT 1;
+
+
+■更新日時の昇順で2件目 を取得するSQL
+SELECT *
+FROM USER
+ORDER BY 更新日時 ASC
+LIMIT 1 OFFSET 1;
+
+
+■親テーブルのPKで検索し、その結果に紐づくUSERテーブルの「更新日時の昇順で1件目と2件目のユーザ名を1レコードにまとめて返す
+WITH parent_row AS (
+    SELECT *
+    FROM PARENT
+    WHERE ID = '指定する親のID'
+),
+filtered_users AS (
+    SELECT u.ユーザ名,
+           u.条件ID,
+           ROW_NUMBER() OVER (ORDER BY u.更新日時 ASC) AS rn
+    FROM USER u
+    JOIN parent_row p
+      ON u.条件ID = p.検索条件ID
+),
+ranked_result AS (
+    SELECT
+        MAX(CASE WHEN rn = 1 THEN ユーザ名 END) AS first_user,
+        MAX(CASE WHEN rn = 2 THEN ユーザ名 END) AS second_user
+    FROM filtered_users
+)
+SELECT 
+    p.ID AS 親ID,
+    p.検索条件ID,
+    r.first_user,
+    r.second_user
+FROM parent_row p
+CROSS JOIN ranked_result r;
