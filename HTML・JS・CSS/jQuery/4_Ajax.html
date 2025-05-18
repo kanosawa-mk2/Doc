@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery AJAX</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <button id="loadBtn">データ取得</button>
+  <ul id="result"></ul>
+
+  <script>
+    $('#loadBtn').click(function() {
+      $.get('https://jsonplaceholder.typicode.com/users', function(data) {
+        $('#result').empty(); // クリア
+        data.slice(0, 5).forEach(function(user) {
+          $('#result').append('<li>' + user.name + '</li>');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

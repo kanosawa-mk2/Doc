@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>jQueryセレクタ＆DOM操作</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1 id="title">こんにちは</h1>
+  <p class="message">最初のメッセージです。</p>
+  <button id="changeBtn">メッセージ変更</button>
+
+  <script>
+    $('#changeBtn').click(function() {
+      $('#title').text('jQueryでタイトル変更！');
+      $('.message').text('ボタンが押されました。');
+    });
+  </script>
+</body>
+</html>

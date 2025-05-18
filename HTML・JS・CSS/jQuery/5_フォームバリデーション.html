@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>バリデーション</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <form id="myForm">
+    <input type="text" id="username" placeholder="ユーザー名">
+    <button type="submit">送信</button>
+    <p id="error" style="color:red; display:none;">ユーザー名を入力してください。</p>
+  </form>
+
+  <script>
+    $('#myForm').submit(function(event) {
+      if ($('#username').val().trim() === '') {
+        event.preventDefault();
+        $('#error').show();
+      } else {
+        $('#error').hide();
+      }
+    });
+  </script>
+</body>
+</html>

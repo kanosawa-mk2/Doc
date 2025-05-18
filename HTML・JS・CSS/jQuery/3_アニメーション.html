@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アニメーション</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <button id="fadeToggle">フェード切り替え</button>
+  <div id="box" style="width:200px; height:100px; background:red; margin-top:10px;"></div>
+
+  <script>
+    $('#fadeToggle').click(function() {
+      $('#box').fadeToggle(500);
+    });
+  </script>
+</body>
+</html>
