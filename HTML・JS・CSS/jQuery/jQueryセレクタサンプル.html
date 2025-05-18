@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>jQueryセレクタサンプル</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .highlight { background-color: lightgreen; }
+    .even-row { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+  <h1 id="example">これはタイトルです</h1>
+
+  <div class="item">アイテム1</div>
+  <div class="item">アイテム2</div>
+
+  <p>これは段落です</p>
+  <p>重要なお知らせがあります。</p>
+
+  <div class="container">
+    <ul>
+      <li>コンテナ内のリスト1</li>
+      <li>コンテナ内のリスト2</li>
+    </ul>
+  </div>
+
+  <ul class="list">
+    <li>リスト1</li>
+    <li>リスト2</li>
+  </ul>
+
+  <input type="text" name="email" placeholder="メールアドレス"><br>
+
+  <input type="checkbox" value="A" checked> A<br>
+  <input type="checkbox" value="B"> B<br>
+  <input type="checkbox" value="C" checked> C<br>
+
+  <table border="1">
+    <tr><td>1行目</td></tr>
+    <tr><td>2行目</td></tr>
+    <tr><td>3行目</td></tr>
+  </table>
+
+  <button>ボタン1</button>
+  <button>ボタン2</button>
+
+  <script>
+    // IDセレクタ
+    $('#example').text('これはIDセレクタの例です');
+
+    // クラスセレクタ
+    $('.item').css('color', 'blue');
+
+    // タグ名セレクタ
+    $('p').hide().fadeIn();
+
+    // 複数指定セレクタ
+    $('div, span').addClass('highlight');
+
+    // 子孫セレクタ
+    $('.container li').css('font-weight', 'bold');
+
+    // 子セレクタ
+    $('.list > li').css('border', '1px solid gray');
+
+    // 属性セレクタ
+    $('input[name="email"]').val('sample@example.com');
+
+    // 疑似クラスセレクタ
+    $('li:first').css('background', 'yellow');
+    $('tr:even').addClass('even-row');
+
+    // 特定のテキストを含む要素
+    $('p:contains("重要")').css('color', 'red');
+
+    // チェックされたチェックボックスの値をログ出力
+    $('input[type="checkbox"]:checked').each(function() {
+      console.log('チェック済: ' + $(this).val());
+    });
+
+    // イベント内 this の使用
+    $('button').click(function() {
+      $(this).text('クリックされました');
+    });
+
+    // .find()：子孫要素をさらに絞り込む
+    $('.container').find('li').css('color', 'red'); // .containerの中にある<li>すべてが対象。
+
+    // .filter()：条件に合う要素だけを残す
+    $('li').filter(':first').css('font-weight', 'bold'); // すべての<li>のうち、最初の1つだけにスタイルを適用。
+
+    // <li>のテキストに "2" が含まれるものだけに適用。
+    $('li').filter(function() {
+      return $(this).text().includes('2');
+    }).css('color', 'green');
+
+    // .children()：直下の子要素に限定
+    $('.list').children('li').css('border', '1px dashed gray'); // .list の 直下の <li> 要素にのみ適用（ネストされた子孫は含まない）。
+    
+    // セレクタをチェーンでつなぐ
+    $('.container ul').find('li').eq(1).css('background', 'yellow'); // .containerの中の<ul>の<li>のうち、2番目の要素に背景色
+    
+    // .not()：特定の条件を除外
+    $('li').not(':first').css('opacity', '0.5'); // 最初の<li>を除外して、他のすべての<li>にスタイルを適用。
+    
+        
+
+
+
+  </script>
+
+</body>
+</html>
