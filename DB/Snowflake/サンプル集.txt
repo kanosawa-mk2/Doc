@@ -39,3 +39,40 @@ SELECT
     r.second_user
 FROM parent_row p
 CROSS JOIN ranked_result r;
+
+
+■親が複数になる対応
+WITH parent_rows AS (
+    SELECT *
+    FROM PARENT
+    WHERE ID IN ('親ID1', '親ID2', '親ID3')  -- 対象の複数の親ID
+),
+filtered_users AS (
+    SELECT 
+        u.ユーザ名,
+        u.条件ID,
+        p.ID AS 親ID,
+        ROW_NUMBER() OVER (
+            PARTITION BY p.ID
+            ORDER BY u.更新日時 ASC
+        ) AS rn
+    FROM USER u
+    JOIN parent_rows p
+      ON u.条件ID = p.検索条件ID
+),
+ranked_result AS (
+    SELECT
+        親ID,
+        MAX(CASE WHEN rn = 1 THEN ユーザ名 END) AS first_user,
+        MAX(CASE WHEN rn = 2 THEN ユーザ名 END) AS second_user
+    FROM filtered_users
+    WHERE rn IN (1, 2)
+    GROUP BY 親ID
+)
+SELECT
+    p.ID AS 親ID,
+    p.検索条件ID,
+    r.first_user,
+    r.second_user
+FROM parent_rows p
+LEFT JOIN ranked_result r ON p.ID = r.親ID;
